@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zero Two - Искусственный Интеллект</title>
+    <title>Zero Two AI - Мини Приложение</title>
     <link rel="icon" type="image/png" href="ZeroTwo.png">
-    <!-- TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
     <style>
         * {
@@ -35,153 +34,290 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 45, 149, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
         }
 
-        .container {
-            max-width: 1400px;
+        .app-container {
+            max-width: 400px;
             margin: 0 auto;
             padding: 20px;
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 30px;
             min-height: 100vh;
-        }
-
-        @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Навигация */
-        .navigation {
             display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+            flex-direction: column;
         }
 
-        .nav-button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 15px;
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px;
             background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .title {
+            font-size: 1.8em;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: none;
+            border: none;
             color: var(--light);
             cursor: pointer;
-            font-weight: 600;
+            border-radius: 12px;
             transition: all 0.3s ease;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
+            font-weight: 600;
+            font-size: 0.8em;
         }
 
-        .nav-button.active {
+        .nav-tab.active {
             background: var(--gradient);
             box-shadow: 0 4px 15px rgba(255, 45, 149, 0.3);
         }
 
-        .nav-button.dev-mode {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-        }
-
-        .nav-button.dev-mode.active {
-            background: var(--dev-gradient);
-            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
-        }
-
-        .nav-button:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Контент вкладок */
+        /* Tab Content */
         .tab-content {
             display: none;
-            animation: fadeIn 0.5s ease;
+            flex: 1;
+            animation: fadeIn 0.3s ease;
         }
 
         .tab-content.active {
-            display: block;
+            display: flex;
+            flex-direction: column;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Dev Mode Access */
-        .dev-access {
-            background: rgba(0, 255, 136, 0.05);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 15px;
-            padding: 40px;
-            text-align: center;
-            margin-bottom: 30px;
+        /* Chat */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
         }
 
-        .access-form {
-            max-width: 400px;
-            margin: 0 auto;
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            animation: messageAppear 0.3s ease;
+        }
+
+        @keyframes messageAppear {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-size: 0.8em;
+        }
+
+        .ai-avatar {
+            background: var(--gradient);
+        }
+
+        .user-avatar {
+            background: var(--secondary);
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        .ai-message {
+            background: rgba(255, 45, 149, 0.2);
+            border: 1px solid rgba(255, 45, 149, 0.3);
+        }
+
+        .user-message {
+            background: rgba(138, 43, 226, 0.2);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            text-align: right;
+        }
+
+        .chat-input-container {
+            padding: 15px;
+            border-top: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            font-size: 0.9em;
+            border: 1px solid var(--glass-border);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .send-button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 20px;
+            background: var(--gradient);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Character Mode */
+        .scenes-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .scene-card {
+            background: rgba(255, 45, 149, 0.1);
+            border: 1px solid rgba(255, 45, 149, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scene-card:hover {
+            background: rgba(255, 45, 149, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .scene-icon {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+        }
+
+        .scene-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .scene-desc {
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+
+        /* Dev Mode */
+        .dev-access {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 15px;
         }
 
         .access-input {
             width: 100%;
-            padding: 15px 20px;
+            padding: 12px;
             border: 1px solid rgba(0, 255, 136, 0.3);
             border-radius: 10px;
             background: rgba(0, 0, 0, 0.3);
             color: var(--light);
-            font-size: 1em;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
-            letter-spacing: 2px;
             font-family: 'Courier New', monospace;
         }
 
-        .access-input:focus {
-            outline: none;
-            border-color: var(--dev-mode);
-            box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
-        }
-
         .access-button {
-            padding: 15px 30px;
+            padding: 12px 25px;
             border: none;
             border-radius: 10px;
             background: var(--dev-gradient);
             color: white;
             cursor: pointer;
             font-weight: 600;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
         }
 
-        .access-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.4);
-        }
-
-        .access-message {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.9em;
-            display: none;
-        }
-
-        .access-success {
-            background: rgba(0, 255, 0, 0.1);
-            border: 1px solid rgba(0, 255, 0, 0.3);
-            color: #00ff00;
-        }
-
-        .access-error {
-            background: rgba(255, 0, 0, 0.1);
-            border: 1px solid rgba(255, 0, 0, 0.3);
-            color: #ff4444;
-        }
-
-        /* Dev Mode Content (скрыт по умолчанию) */
         .dev-content {
             display: none;
         }
@@ -190,878 +326,402 @@
             display: block;
         }
 
-        /* Карточки */
-        .card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .card h2 {
-            color: var(--primary);
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card.dev-mode h2 {
-            color: var(--dev-mode);
-        }
-
-        .card h2::before {
-            content: '✦';
-            color: var(--accent);
-        }
-
-        .card.dev-mode h2::before {
-            content: '⚙️';
-            color: var(--dev-mode);
-        }
-
-        /* TensorFlow специфичные стили */
         .training-controls {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
         .control-group {
             background: rgba(0, 255, 136, 0.1);
             border: 1px solid rgba(0, 255, 136, 0.3);
             border-radius: 10px;
-            padding: 15px;
+            padding: 10px;
         }
 
         .control-label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-weight: 600;
             color: var(--dev-mode);
-            font-size: 0.9em;
+            font-size: 0.8em;
         }
 
         .control-input {
             width: 100%;
-            padding: 8px 12px;
+            padding: 8px;
             border: 1px solid rgba(0, 255, 136, 0.3);
             border-radius: 8px;
             background: rgba(0, 0, 0, 0.3);
             color: var(--light);
-            font-size: 0.9em;
-        }
-
-        .control-input:focus {
-            outline: none;
-            border-color: var(--dev-mode);
+            font-size: 0.8em;
         }
 
         .training-button {
-            padding: 12px 20px;
+            padding: 10px 15px;
             border: none;
             border-radius: 10px;
             background: var(--dev-gradient);
             color: white;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
-        }
-
-        .training-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.4);
-        }
-
-        .training-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .model-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .stat-card {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.5em;
-            font-weight: 800;
-            color: var(--dev-mode);
-            display: block;
-        }
-
-        .stat-label {
             font-size: 0.8em;
-            opacity: 0.8;
-            margin-top: 5px;
+            margin: 5px;
         }
 
         .training-log {
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(0, 255, 136, 0.3);
             border-radius: 10px;
-            padding: 15px;
-            height: 200px;
+            padding: 10px;
+            height: 150px;
             overflow-y: auto;
             font-family: 'Courier New', monospace;
-            font-size: 0.8em;
-            margin-top: 20px;
+            font-size: 0.7em;
+            margin-top: 10px;
         }
 
-        .log-entry {
-            margin-bottom: 5px;
-            padding: 5px;
-            border-radius: 5px;
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
         }
 
-        .log-info {
-            background: rgba(0, 255, 0, 0.1);
-            border-left: 3px solid #00ff00;
-        }
-
-        .log-warning {
-            background: rgba(255, 255, 0, 0.1);
-            border-left: 3px solid #ffff00;
-        }
-
-        .log-error {
-            background: rgba(255, 0, 0, 0.1);
-            border-left: 3px solid #ff0000;
-        }
-
-        .training-progress {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--dev-gradient);
-            border-radius: 4px;
-            transition: width 0.3s ease;
-            width: 0%;
-        }
-
-        .neural-network-viz {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(0, 255, 136, 0.3);
+        .stat-card {
+            background: rgba(255, 45, 149, 0.1);
+            border: 1px solid rgba(255, 45, 149, 0.3);
             border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            position: relative;
-            height: 200px;
-            overflow: hidden;
+            padding: 15px;
+            text-align: center;
         }
 
-        .neuron {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: var(--dev-mode);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
+        .stat-value {
+            font-size: 1.2em;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
         }
 
-        .connection {
-            position: absolute;
-            height: 2px;
-            background: rgba(0, 255, 136, 0.5);
-            transform-origin: 0 0;
+        .stat-label {
+            font-size: 0.7em;
+            opacity: 0.8;
+            margin-top: 5px;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
+        /* Typing Indicator */
+        .typing-indicator {
+            display: none;
+            padding: 10px;
+            color: var(--primary);
+            font-style: italic;
+            font-size: 0.8em;
         }
 
-        /* Остальные стили... */
+        .typing-dots {
+            display: inline-block;
+            animation: typing 1.4s infinite;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.3; }
+            30% { opacity: 1; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient);
+            border-radius: 2px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Навигация -->
-        <div class="navigation" style="grid-column: 1 / -1;">
-            <button class="nav-button active" onclick="switchTab('main')">Zero Two AI</button>
-            <button class="nav-button dev-mode" onclick="switchTab('dev')">Dev Mode</button>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="title">Zero Two AI</h1>
+            <p class="subtitle">Мини Приложение • Dino-Сознание</p>
         </div>
 
-        <!-- Вкладка Dev Mode -->
-        <div id="dev-tab" class="tab-content active">
-            <!-- Форма доступа -->
-            <div class="dev-access" id="devAccess">
-                <div class="access-form">
-                    <h2 style="color: var(--dev-mode); margin-bottom: 20px;">🔐 Dev Mode Access</h2>
-                    <input type="password" class="access-input" id="devPassword" placeholder="Enter access code" autocomplete="off">
-                    <button class="access-button" onclick="checkDevAccess()">Access System</button>
-                    <div class="access-message" id="accessMessage"></div>
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('chat')">💬 Чат</button>
+            <button class="nav-tab" onclick="switchTab('character')">🎭 Персонаж</button>
+            <button class="nav-tab" onclick="switchTab('dev')">🔧 Dev</button>
+            <button class="nav-tab" onclick="switchTab('stats')">📊 Статы</button>
+        </div>
+
+        <!-- Chat Tab -->
+        <div id="chat-tab" class="tab-content active">
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message">
+                        <div class="message-avatar ai-avatar">02</div>
+                        <div class="message-content ai-message">
+                            Привет, Дорогой! 💕 Я Zero Two! Готова к общению и приключениям! 🦖
+                        </div>
+                    </div>
+                </div>
+                <div class="typing-indicator" id="typingIndicator">
+                    Zero Two печатает<span class="typing-dots">...</span>
+                </div>
+                <div class="chat-input-container">
+                    <div class="chat-input-group">
+                        <input type="text" class="chat-input" id="chatInput" placeholder="Напиши сообщение...">
+                        <button class="send-button" onclick="sendMessage()">➤</button>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Контент Dev Mode (скрыт до ввода пароля) -->
-            <div class="dev-content" id="devContent">
-                <div class="main-content">
-                    <header class="header" style="background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.3);">
-                        <h1 class="title" style="background: var(--dev-gradient); -webkit-background-clip: text;">TensorFlow.js Dev Mode</h1>
-                        <p class="subtitle">Нейросетевое обучение в реальном времени в браузере</p>
-                        <div class="badge" style="background: var(--dev-gradient);">TensorFlow.js • Dev Mode • Обучение в реальном времени</div>
-                    </header>
-
-                    <!-- Управление обучением -->
-                    <section class="card dev-mode">
-                        <h2>⚙️ Управление обучением</h2>
-                        <div class="training-controls">
-                            <div class="control-group">
-                                <label class="control-label">Эпохи обучения</label>
-                                <input type="number" class="control-input" id="epochs" value="50" min="1" max="1000">
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">Размер батча</label>
-                                <input type="number" class="control-input" id="batchSize" value="32" min="1" max="128">
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">Скорость обучения</label>
-                                <input type="number" class="control-input" id="learningRate" value="0.001" step="0.001" min="0.0001" max="0.1">
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">Размер скрытого слоя</label>
-                                <input type="number" class="control-input" id="hiddenUnits" value="128" min="16" max="512">
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 10px; margin-top: 15px;">
-                            <button class="training-button" onclick="startTraining()" id="trainButton">🎯 Начать обучение</button>
-                            <button class="training-button" onclick="stopTraining()" id="stopButton" disabled>⏹️ Остановить</button>
-                            <button class="training-button" onclick="resetModel()" id="resetButton">🔄 Сбросить модель</button>
-                        </div>
-                    </section>
-
-                    <!-- Статистика модели -->
-                    <section class="card dev-mode">
-                        <h2>📊 Статистика модели</h2>
-                        <div class="model-stats">
-                            <div class="stat-card">
-                                <span class="stat-value" id="currentEpoch">0</span>
-                                <span class="stat-label">Текущая эпоха</span>
-                            </div>
-                            <div class="stat-card">
-                                <span class="stat-value" id="currentLoss">0.0000</span>
-                                <span class="stat-label">Потери</span>
-                            </div>
-                            <div class="stat-card">
-                                <span class="stat-value" id="currentAccuracy">0%</span>
-                                <span class="stat-label">Точность</span>
-                            </div>
-                            <div class="stat-card">
-                                <span class="stat-value" id="trainingTime">0s</span>
-                                <span class="stat-label">Время обучения</span>
-                            </div>
-                        </div>
-                        <div class="training-progress">
-                            <div class="progress-fill" id="trainingProgress"></div>
-                        </div>
-                    </section>
-
-                    <!-- Визуализация нейросети -->
-                    <section class="card dev-mode">
-                        <h2>🔍 Визуализация нейросети</h2>
-                        <div class="neural-network-viz" id="networkViz">
-                            <!-- Нейроны и связи будут генерироваться JavaScript -->
-                        </div>
-                    </section>
-
-                    <!-- Лог обучения -->
-                    <section class="card dev-mode">
-                        <h2>📝 Лог обучения</h2>
-                        <div class="training-log" id="trainingLog">
-                            <div class="log-entry log-info">Система TensorFlow.js инициализирована</div>
-                            <div class="log-entry log-info">Готов к обучению нейросети</div>
-                        </div>
-                    </section>
-
-                    <!-- Тестирование модели -->
-                    <section class="card dev-mode">
-                        <h2>🧪 Тестирование модели</h2>
-                        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                            <input type="text" class="control-input" id="testInput" placeholder="Введите текст для теста..." style="flex: 1;">
-                            <button class="training-button" onclick="testModel()" id="testButton">Тестировать</button>
-                        </div>
-                        <div id="testResults" style="background: rgba(0, 255, 136, 0.1); border-radius: 10px; padding: 15px; min-height: 60px;">
-                            Результаты тестирования появятся здесь...
-                        </div>
-                    </section>
+        <!-- Character Tab -->
+        <div id="character-tab" class="tab-content">
+            <div class="scenes-grid">
+                <div class="scene-card" onclick="startScene('forest')">
+                    <div class="scene-icon">🌲</div>
+                    <div class="scene-title">Таинственный лес</div>
+                    <div class="scene-desc">Приключение в древнем лесу</div>
                 </div>
+                <div class="scene-card" onclick="startScene('castle')">
+                    <div class="scene-icon">🏰</div>
+                    <div class="scene-title">Замок дракона</div>
+                    <div class="scene-desc">Опасное путешествие</div>
+                </div>
+                <div class="scene-card" onclick="startScene('starship')">
+                    <div class="scene-icon">🚀</div>
+                    <div class="scene-title">Космический корабль</div>
+                    <div class="scene-desc">Исследование галактики</div>
+                </div>
+                <div class="scene-card" onclick="startScene('detective')">
+                    <div class="scene-icon">🕵️</div>
+                    <div class="scene-title">Детектив</div>
+                    <div class="scene-desc">Расследование преступления</div>
+                </div>
+            </div>
+        </div>
 
-                <!-- Боковая панель -->
-                <div class="chat-sidebar">
-                    <!-- Информация о модели -->
-                    <div class="card dev-mode">
-                        <h2>🧠 Архитектура модели</h2>
-                        <div class="model-stats">
-                            <div class="stat-card">
-                                <span class="stat-value" id="modelLayers">3</span>
-                                <span class="stat-label">Слоя</span>
-                            </div>
-                            <div class="stat-card">
-                                <span class="stat-value" id="totalParams">0</span>
-                                <span class="stat-label">Параметров</span>
-                            </div>
-                            <div class="stat-card">
-                                <span class="stat-value" id="vocabSize">1000</span>
-                                <span class="stat-label">Слов в словаре</span>
-                            </div>
-                        </div>
-                        <div style="margin-top: 15px; font-size: 0.9em;">
-                            <strong>Тип модели:</strong> LSTM + Dense<br>
-                            <strong>Активация:</strong> ReLU + Softmax<br>
-                            <strong>Оптимизатор:</strong> Adam
-                        </div>
-                    </div>
+        <!-- Dev Tab -->
+        <div id="dev-tab" class="tab-content">
+            <div class="dev-access" id="devAccess">
+                <h3 style="color: var(--dev-mode); margin-bottom: 15px;">🔐 Dev Mode Access</h3>
+                <input type="password" class="access-input" id="devPassword" placeholder="Enter access code">
+                <button class="access-button" onclick="checkDevAccess()">Access System</button>
+                <div id="accessMessage" style="margin-top: 10px; font-size: 0.8em;"></div>
+            </div>
 
-                    <!-- Данные обучения -->
-                    <div class="card dev-mode">
-                        <h2>📚 Данные обучения</h2>
-                        <div class="model-stats">
-                            <div class="stat-card">
-                                <span class="stat-value" id="trainingSamples">500</span>
-                                <span class="stat-label">Примеров</span>
-                            </div>
-                            <div class="stat-card">
-                                <span class="stat-value" id="validationSplit">20%</span>
-                                <span class="stat-label">Валидация</span>
-                            </div>
-                            <div class="stat-card">
-                                <span class="stat-value" id="dataSize">150KB</span>
-                                <span class="stat-label">Размер данных</span>
-                            </div>
-                        </div>
+            <div class="dev-content" id="devContent">
+                <div class="training-controls">
+                    <div class="control-group">
+                        <label class="control-label">Эпохи</label>
+                        <input type="number" class="control-input" id="epochs" value="50">
                     </div>
+                    <div class="control-group">
+                        <label class="control-label">Батч</label>
+                        <input type="number" class="control-input" id="batchSize" value="32">
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <button class="training-button" onclick="startTraining()">🎯 Обучать</button>
+                    <button class="training-button" onclick="resetModel()">🔄 Сбросить</button>
+                </div>
+                <div class="training-log" id="trainingLog">
+                    [Система] Готов к работе
+                </div>
+            </div>
+        </div>
 
-                    <!-- Экспорт модели -->
-                    <div class="card dev-mode">
-                        <h2>💾 Экспорт модели</h2>
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <button class="training-button" onclick="saveModel()">💾 Сохранить модель</button>
-                            <button class="training-button" onclick="loadModel()">📂 Загрузить модель</button>
-                            <button class="training-button" onclick="exportModel()">📤 Экспорт в JSON</button>
-                        </div>
-                    </div>
+        <!-- Stats Tab -->
+        <div id="stats-tab" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="statMessages">0</span>
+                    <span class="stat-label">Сообщений</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="statWords">0</span>
+                    <span class="stat-label">Слов изучено</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="statSessions">0</span>
+                    <span class="stat-label">Сессий</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">94%</span>
+                    <span class="stat-label">Точность</span>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Система доступа к Dev Mode
-        const DEV_PASSWORD = "ZTDfK";
+        // State management
+        let messageCount = 0;
+        let learnedWords = 0;
+        let rpSessions = 0;
         let devModeUnlocked = false;
+        let currentScene = null;
 
-        function checkDevAccess() {
-            const passwordInput = document.getElementById('devPassword');
-            const messageDiv = document.getElementById('accessMessage');
-            const enteredPassword = passwordInput.value.trim();
-
-            if (enteredPassword === DEV_PASSWORD) {
-                devModeUnlocked = true;
-                messageDiv.textContent = "✓ Доступ разрешен";
-                messageDiv.className = "access-message access-success";
-                messageDiv.style.display = 'block';
-                
-                // Прячем форму доступа и показываем контент
-                setTimeout(() => {
-                    document.getElementById('devAccess').style.display = 'none';
-                    document.getElementById('devContent').classList.add('active');
-                    addLog('Dev Mode активирован', 'info');
-                }, 1000);
-            } else {
-                messageDiv.textContent = "Неверный код доступа";
-                messageDiv.className = "access-message access-error";
-                messageDiv.style.display = 'block';
-                passwordInput.value = '';
-                
-                // Вибрация при ошибке (если поддерживается)
-                if (navigator.vibrate) {
-                    navigator.vibrate(200);
-                }
-            }
-        }
-
-        // Обработка Enter в поле пароля
-        document.getElementById('devPassword').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkDevAccess();
-            }
-        });
-
-        // TensorFlow.js система обучения
-        let model;
-        let isTraining = false;
-        let trainingStartTime;
-        let currentEpoch = 0;
-        let trainingData = [];
-        let vocabulary = new Set();
-        const MAX_VOCAB_SIZE = 1000;
-
-        // Инициализация модели
-        async function createModel(hiddenUnits = 128) {
-            const model = tf.sequential({
-                layers: [
-                    tf.layers.dense({
-                        inputShape: [MAX_VOCAB_SIZE],
-                        units: hiddenUnits,
-                        activation: 'relu'
-                    }),
-                    tf.layers.dropout({ rate: 0.3 }),
-                    tf.layers.dense({
-                        units: hiddenUnits / 2,
-                        activation: 'relu'
-                    }),
-                    tf.layers.dense({
-                        units: 10, // Количество классов для классификации
-                        activation: 'softmax'
-                    })
-                ]
-            });
-
-            model.compile({
-                optimizer: tf.train.adam(parseFloat(document.getElementById('learningRate').value)),
-                loss: 'categoricalCrossentropy',
-                metrics: ['accuracy']
-            });
-
-            return model;
-        }
-
-        // Создание словаря
-        function buildVocabulary(texts) {
-            vocabulary.clear();
-            texts.forEach(text => {
-                const words = text.toLowerCase().split(/\s+/);
-                words.forEach(word => {
-                    if (word.length > 2 && vocabulary.size < MAX_VOCAB_SIZE) {
-                        vocabulary.add(word);
-                    }
-                });
-            });
-            return vocabulary;
-        }
-
-        // Векторизация текста
-        function textToVector(text) {
-            const words = text.toLowerCase().split(/\s+/);
-            const vector = new Array(MAX_VOCAB_SIZE).fill(0);
-            const vocabArray = Array.from(vocabulary);
-            
-            words.forEach(word => {
-                const index = vocabArray.indexOf(word);
-                if (index !== -1) {
-                    vector[index] = 1;
-                }
-            });
-            
-            return vector;
-        }
-
-        // Генерация тренировочных данных
-        function generateTrainingData() {
-            const sampleTexts = [
-                "привет как дела сегодня прекрасная погода",
-                "я люблю искусственный интеллект и машинное обучение",
-                "нейросети это очень интересно и перспективно",
-                "программирование на python и javascript",
-                "тензорфлоу от гугл для машинного обучения",
-                "глубокое обучение и компьютерное зрение",
-                "обработка естественного языка нлп",
-                "данные для тренировки моделей машинного обучения",
-                "алгоритмы и структуры данных в программировании",
-                "веб разработка и мобильные приложения",
-                "сегодня солнечный день и я счастлив",
-                "машинное обучение изменяет мир технологий",
-                "python лучший язык для анализа данных",
-                "искусственный интеллект будущее человечества",
-                "глубокие нейронные сети сложны но интересны"
-            ];
-
-            buildVocabulary(sampleTexts);
-            
-            trainingData = sampleTexts.map((text, index) => ({
-                input: textToVector(text),
-                output: Array(10).fill(0).map((_, i) => i === index % 10 ? 1 : 0)
-            }));
-
-            document.getElementById('trainingSamples').textContent = trainingData.length;
-            document.getElementById('vocabSize').textContent = vocabulary.size;
-        }
-
-        // Начало обучения
-        async function startTraining() {
-            if (!devModeUnlocked) {
-                addLog('Требуется доступ к Dev Mode', 'error');
-                return;
-            }
-            
-            if (isTraining) return;
-            
-            isTraining = true;
-            document.getElementById('trainButton').disabled = true;
-            document.getElementById('stopButton').disabled = false;
-            document.getElementById('testButton').disabled = true;
-            
-            const epochs = parseInt(document.getElementById('epochs').value);
-            const batchSize = parseInt(document.getElementById('batchSize').value);
-            const hiddenUnits = parseInt(document.getElementById('hiddenUnits').value);
-            
-            // Создаем или пересоздаем модель
-            if (model) {
-                model.dispose();
-            }
-            model = await createModel(hiddenUnits);
-            
-            // Генерируем данные
-            generateTrainingData();
-            
-            // Подготавливаем тензоры
-            const inputs = tf.tensor2d(trainingData.map(d => d.input));
-            const outputs = tf.tensor2d(trainingData.map(d => d.output));
-            
-            trainingStartTime = Date.now();
-            currentEpoch = 0;
-            
-            addLog('Начало обучения модели...', 'info');
-            visualizeNetwork();
-            
-            // Цикл обучения
-            for (let epoch = 1; epoch <= epochs && isTraining; epoch++) {
-                currentEpoch = epoch;
-                
-                const history = await model.fit(inputs, outputs, {
-                    epochs: 1,
-                    batchSize: batchSize,
-                    shuffle: true,
-                    validationSplit: 0.2
-                });
-                
-                const loss = history.history.loss[0];
-                const accuracy = history.history.acc ? history.history.acc[0] : 0;
-                
-                // Обновляем UI
-                updateTrainingStats(epoch, loss, accuracy);
-                updateNetworkVisualization();
-                
-                // Добавляем лог каждые 10 эпох
-                if (epoch % 10 === 0) {
-                    addLog(`Эпоха ${epoch}: Потери = ${loss.toFixed(4)}, Точность = ${(accuracy * 100).toFixed(1)}%`, 'info');
-                }
-                
-                // Даем браузеру время для обновления UI
-                await tf.nextFrame();
-            }
-            
-            finishTraining();
-        }
-
-        // Остановка обучения
-        function stopTraining() {
-            isTraining = false;
-            addLog('Обучение остановлено пользователем', 'warning');
-            finishTraining();
-        }
-
-        // Завершение обучения
-        function finishTraining() {
-            isTraining = false;
-            document.getElementById('trainButton').disabled = false;
-            document.getElementById('stopButton').disabled = true;
-            document.getElementById('testButton').disabled = false;
-            
-            const trainingTime = ((Date.now() - trainingStartTime) / 1000).toFixed(1);
-            document.getElementById('trainingTime').textContent = trainingTime + 's';
-            
-            addLog('Обучение завершено!', 'info');
-            updateModelParams();
-        }
-
-        // Сброс модели
-        function resetModel() {
-            if (model) {
-                model.dispose();
-                model = null;
-            }
-            
-            currentEpoch = 0;
-            document.getElementById('currentEpoch').textContent = '0';
-            document.getElementById('currentLoss').textContent = '0.0000';
-            document.getElementById('currentAccuracy').textContent = '0%';
-            document.getElementById('trainingProgress').style.width = '0%';
-            document.getElementById('trainingTime').textContent = '0s';
-            
-            addLog('Модель сброшена', 'info');
-        }
-
-        // Тестирование модели
-        async function testModel() {
-            if (!devModeUnlocked) {
-                addLog('Требуется доступ к Dev Mode', 'error');
-                return;
-            }
-            
-            if (!model) {
-                addLog('Модель не обучена!', 'error');
-                return;
-            }
-            
-            const testText = document.getElementById('testInput').value;
-            if (!testText) {
-                addLog('Введите текст для тестирования', 'warning');
-                return;
-            }
-            
-            const vector = textToVector(testText);
-            const input = tf.tensor2d([vector]);
-            
-            const prediction = model.predict(input);
-            const results = await prediction.data();
-            
-            input.dispose();
-            prediction.dispose();
-            
-            // Анализ результатов
-            const maxConfidence = Math.max(...results);
-            const predictedClass = results.indexOf(maxConfidence);
-            
-            let analysis = `
-                <strong>Текст:</strong> "${testText}"<br>
-                <strong>Уверенность:</strong> ${(maxConfidence * 100).toFixed(1)}%<br>
-                <strong>Класс:</strong> ${predictedClass}<br>
-                <strong>Распределение:</strong><br>
-            `;
-            
-            results.forEach((conf, idx) => {
-                analysis += `Класс ${idx}: ${(conf * 100).toFixed(1)}%<br>`;
-            });
-            
-            document.getElementById('testResults').innerHTML = analysis;
-            addLog(`Протестирован текст: "${testText}"`, 'info');
-        }
-
-        // Обновление статистики обучения
-        function updateTrainingStats(epoch, loss, accuracy) {
-            document.getElementById('currentEpoch').textContent = epoch;
-            document.getElementById('currentLoss').textContent = loss.toFixed(4);
-            document.getElementById('currentAccuracy').textContent = (accuracy * 100).toFixed(1) + '%';
-            
-            const epochsTotal = parseInt(document.getElementById('epochs').value);
-            const progress = (epoch / epochsTotal) * 100;
-            document.getElementById('trainingProgress').style.width = progress + '%';
-            
-            const elapsedTime = ((Date.now() - trainingStartTime) / 1000).toFixed(1);
-            document.getElementById('trainingTime').textContent = elapsedTime + 's';
-        }
-
-        // Визуализация нейросети
-        function visualizeNetwork() {
-            const container = document.getElementById('networkViz');
-            container.innerHTML = '';
-            
-            const layers = [4, 6, 4, 3]; // Количество нейронов в каждом слое
-            const layerSpacing = 80;
-            const neuronSpacing = 30;
-            
-            let connections = [];
-            
-            // Создаем нейроны
-            layers.forEach((neuronCount, layerIndex) => {
-                for (let i = 0; i < neuronCount; i++) {
-                    const x = 50 + layerIndex * layerSpacing;
-                    const y = 50 + i * neuronSpacing;
-                    
-                    const neuron = document.createElement('div');
-                    neuron.className = 'neuron';
-                    neuron.style.left = x + 'px';
-                    neuron.style.top = y + 'px';
-                    neuron.style.animationDelay = (Math.random() * 2) + 's';
-                    container.appendChild(neuron);
-                    
-                    // Создаем связи с предыдущим слоем
-                    if (layerIndex > 0) {
-                        const prevLayerCount = layers[layerIndex - 1];
-                        for (let j = 0; j < prevLayerCount; j++) {
-                            const prevX = 50 + (layerIndex - 1) * layerSpacing;
-                            const prevY = 50 + j * neuronSpacing;
-                            
-                            const connection = document.createElement('div');
-                            connection.className = 'connection';
-                            
-                            const length = Math.sqrt(Math.pow(x - prevX, 2) + Math.pow(y - prevY, 2));
-                            const angle = Math.atan2(y - prevY, x - prevX) * 180 / Math.PI;
-                            
-                            connection.style.width = length + 'px';
-                            connection.style.left = prevX + 'px';
-                            connection.style.top = prevY + 'px';
-                            connection.style.transform = `rotate(${angle}deg)`;
-                            connection.style.opacity = 0.3 + Math.random() * 0.4;
-                            
-                            container.appendChild(connection);
-                            connections.push(connection);
-                        }
-                    }
-                }
-            });
-        }
-
-        // Обновление визуализации во время обучения
-        function updateNetworkVisualization() {
-            const neurons = document.querySelectorAll('.neuron');
-            const connections = document.querySelectorAll('.connection');
-            
-            // Анимируем нейроны
-            neurons.forEach(neuron => {
-                if (Math.random() > 0.7) {
-                    neuron.style.opacity = 0.8 + Math.random() * 0.2;
-                }
-            });
-            
-            // Анимируем связи
-            connections.forEach(connection => {
-                if (Math.random() > 0.8) {
-                    connection.style.opacity = 0.4 + Math.random() * 0.3;
-                }
-            });
-        }
-
-        // Добавление записи в лог
-        function addLog(message, type = 'info') {
-            const log = document.getElementById('trainingLog');
-            const entry = document.createElement('div');
-            entry.className = `log-entry log-${type}`;
-            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-            log.appendChild(entry);
-            log.scrollTop = log.scrollHeight;
-        }
-
-        // Обновление параметров модели
-        function updateModelParams() {
-            if (model) {
-                let totalParams = 0;
-                model.layers.forEach(layer => {
-                    layer.getWeights().forEach(weight => {
-                        totalParams += weight.size;
-                    });
-                });
-                document.getElementById('totalParams').textContent = totalParams.toLocaleString();
-            }
-        }
-
-        // Сохранение модели
-        async function saveModel() {
-            if (!devModeUnlocked) {
-                addLog('Требуется доступ к Dev Mode', 'error');
-                return;
-            }
-            
-            if (!model) {
-                addLog('Нет модели для сохранения', 'error');
-                return;
-            }
-            
-            try {
-                await model.save('downloads://zero-two-model');
-                addLog('Модель сохранена успешно', 'info');
-            } catch (error) {
-                addLog('Ошибка сохранения модели: ' + error.message, 'error');
-            }
-        }
-
-        // Загрузка модели
-        async function loadModel() {
-            if (!devModeUnlocked) {
-                addLog('Требуется доступ к Dev Mode', 'error');
-                return;
-            }
-            
-            addLog('Функция загрузки модели в разработке', 'info');
-        }
-
-        // Экспорт модели
-        function exportModel() {
-            if (!devModeUnlocked) {
-                addLog('Требуется доступ к Dev Mode', 'error');
-                return;
-            }
-            
-            if (!model) {
-                addLog('Нет модели для экспорта', 'error');
-                return;
-            }
-            
-            const modelInfo = {
-                architecture: model.layers.map(layer => ({
-                    type: layer.getClassName(),
-                    config: layer.getConfig()
-                })),
-                trainingInfo: {
-                    epochs: currentEpoch,
-                    vocabularySize: vocabulary.size,
-                    trainingSamples: trainingData.length
-                }
-            };
-            
-            const dataStr = JSON.stringify(modelInfo, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(dataBlob);
-            link.download = 'zero-two-model-config.json';
-            link.click();
-            
-            addLog('Конфигурация модели экспортирована', 'info');
-        }
-
-        // Переключение вкладок
+        // Tab switching
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
-            document.querySelectorAll('.nav-button').forEach(btn => {
-                btn.classList.remove('active');
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
             });
             document.getElementById(tabName + '-tab').classList.add('active');
             event.target.classList.add('active');
         }
 
-        // Инициализация при загрузке
-        document.addEventListener('DOMContentLoaded', function() {
-            if (devModeUnlocked) {
-                addLog('TensorFlow.js загружен и готов к работе', 'info');
-                visualizeNetwork();
-                generateTrainingData();
+        // Chat functionality
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Add user message
+            addMessage('user', message);
+            learnedWords += message.split(' ').length;
+            messageCount++;
+            updateStats();
+
+            // Show typing
+            const typing = document.getElementById('typingIndicator');
+            typing.style.display = 'block';
+
+            // Generate response
+            setTimeout(() => {
+                typing.style.display = 'none';
+                const response = generateResponse(message);
+                addMessage('ai', response);
+            }, 1000 + Math.random() * 1000);
+
+            input.value = '';
+        }
+
+        function addMessage(sender, text) {
+            const chat = document.getElementById('chatMessages');
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message' + (sender === 'user' ? ' user' : '');
+            
+            messageElement.innerHTML = `
+                <div class="message-avatar ${sender === 'user' ? 'user-avatar' : 'ai-avatar'}">
+                    ${sender === 'user' ? 'Вы' : '02'}
+                </div>
+                <div class="message-content ${sender === 'user' ? 'user-message' : 'ai-message'}">
+                    ${text}
+                </div>
+            `;
+            
+            chat.appendChild(messageElement);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function generateResponse(userMessage) {
+            const responses = [
+                "О-хо-хо! Интересно... 🦖",
+                "Ха-ха-ха! Ты забавен! 💕",
+                "Готов к приключениям? 💫",
+                "Знаешь, ты мне нравишься... 😊",
+                "Р-р-р! Dino-режим активирован! 🦖",
+                "Заметил, как искрятся мои глаза? 💕",
+                "Интересно... Продолжай! 🎭",
+                "С тобой никогда не скучно! ✨",
+                "Мои алгоритмы в восторге! 🤖",
+                "Ты вдохновляешь меня! 💫"
+            ];
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // Character Mode
+        function startScene(sceneType) {
+            rpSessions++;
+            updateStats();
+            
+            const scenes = {
+                'forest': "🌲 *Шепот ветра* Добро пожаловать в Лес Вечной Тайны...",
+                'castle': "🏰 *Рык дракона* Смельчак! Осмелился потревожить мой покой?",
+                'starship': "🚀 *Гул двигателей* Добро пожаловать на борт звездолёта 'Нова'",
+                'detective': "🕵️ *Стук дождя* Новое дело, детектив. Клиент ждёт..."
+            };
+            
+            switchTab('chat');
+            addMessage('ai', scenes[sceneType]);
+        }
+
+        // Dev Mode
+        function checkDevAccess() {
+            const password = document.getElementById('devPassword').value;
+            const messageDiv = document.getElementById('accessMessage');
+            
+            if (password === 'ZTDfK') {
+                devModeUnlocked = true;
+                messageDiv.textContent = '✅ Доступ разрешен';
+                messageDiv.style.color = 'var(--dev-mode)';
+                document.getElementById('devAccess').style.display = 'none';
+                document.getElementById('devContent').classList.add('active');
+                addLog('Dev Mode активирован');
+            } else {
+                messageDiv.textContent = '❌ Неверный код';
+                messageDiv.style.color = 'var(--accent)';
+            }
+        }
+
+        function startTraining() {
+            if (!devModeUnlocked) {
+                addLog('❌ Требуется доступ Dev Mode');
+                return;
+            }
+            
+            addLog('🚀 Запуск обучения...');
+            addLog('📊 Сбор данных...');
+            addLog('🧠 Компиляция модели...');
+            addLog('⚡ Обучение запущено');
+        }
+
+        function resetModel() {
+            if (!devModeUnlocked) {
+                addLog('❌ Требуется доступ Dev Mode');
+                return;
+            }
+            
+            addLog('🔄 Сброс модели...');
+            addLog('✅ Модель сброшена');
+        }
+
+        function addLog(message) {
+            const log = document.getElementById('trainingLog');
+            log.innerHTML += '\n[' + new Date().toLocaleTimeString() + '] ' + message;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        // Stats
+        function updateStats() {
+            document.getElementById('statMessages').textContent = messageCount;
+            document.getElementById('statWords').textContent = learnedWords;
+            document.getElementById('statSessions').textContent = rpSessions;
+        }
+
+        // Enter key for chat
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
             }
         });
+
+        // Initialize
+        document.getElementById('chatInput').focus();
     </script>
 </body>
 </html>

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zero Two AI - Мини Приложение</title>
     <link rel="icon" type="image/png" href="ZeroTwo.png">
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -18,11 +17,12 @@
             --secondary: #8a2be2;
             --accent: #ff6b6b;
             --dev-mode: #00ff88;
+            --rp-mode: #ffaa00;
             --dark: #1a1a2e;
             --darker: #0f0f1a;
             --light: #f8f9fa;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --dev-gradient: linear-gradient(135deg, var(--dev-mode), #00cc66);
+            --rp-gradient: linear-gradient(135deg, var(--rp-mode), #ff7700);
             --glass: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.2);
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -113,6 +113,11 @@
         .nav-tab.active {
             background: var(--gradient);
             box-shadow: 0 4px 15px rgba(255, 45, 149, 0.3);
+        }
+
+        .nav-tab.rp-active {
+            background: var(--rp-gradient);
+            box-shadow: 0 4px 15px rgba(255, 170, 0, 0.3);
         }
 
         /* Tab Content */
@@ -248,42 +253,152 @@
             transform: translateY(-2px);
         }
 
-        /* Character Mode */
-        .scenes-grid {
+        /* RP Scenes */
+        .rp-scenes {
             display: grid;
             grid-template-columns: 1fr;
             gap: 10px;
             margin-top: 10px;
         }
 
-        .scene-card {
-            background: rgba(255, 45, 149, 0.1);
-            border: 1px solid rgba(255, 45, 149, 0.3);
+        .rp-scene {
+            background: rgba(255, 170, 0, 0.1);
+            border: 1px solid rgba(255, 170, 0, 0.3);
             border-radius: 15px;
             padding: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .scene-card:hover {
-            background: rgba(255, 45, 149, 0.2);
+        .rp-scene::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--rp-gradient);
+        }
+
+        .rp-scene:hover {
+            background: rgba(255, 170, 0, 0.2);
             transform: translateY(-2px);
         }
 
         .scene-icon {
-            font-size: 1.5em;
+            font-size: 1.8em;
             margin-bottom: 8px;
         }
 
         .scene-title {
             font-weight: 600;
             margin-bottom: 5px;
-            color: var(--primary);
+            color: var(--rp-mode);
         }
 
         .scene-desc {
             font-size: 0.8em;
             opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .scene-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7em;
+            opacity: 0.6;
+        }
+
+        /* Active RP Scene */
+        .active-rp {
+            background: rgba(255, 170, 0, 0.15);
+            border: 2px solid var(--rp-mode);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .rp-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .rp-badge {
+            background: var(--rp-gradient);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .rp-description {
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .rp-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .rp-stat {
+            background: rgba(255, 170, 0, 0.1);
+            border: 1px solid rgba(255, 170, 0, 0.3);
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: var(--rp-mode);
+            font-size: 1.1em;
+        }
+
+        .stat-label {
+            font-size: 0.7em;
+            opacity: 0.8;
+        }
+
+        .rp-actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .rp-action {
+            background: rgba(255, 170, 0, 0.2);
+            border: 1px solid rgba(255, 170, 0, 0.4);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            margin-bottom: 5px;
+        }
+
+        .rp-action:hover {
+            background: rgba(255, 170, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .rp-action:active {
+            transform: translateY(0);
+        }
+
+        .rp-back {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-top: 10px;
         }
 
         /* Dev Mode */
@@ -456,9 +571,24 @@
         <!-- Navigation -->
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="switchTab('chat')">💬 Чат</button>
-            <button class="nav-tab" onclick="switchTab('character')">🎭 Персонаж</button>
+            <button class="nav-tab" onclick="switchTab('rp')">🎭 РП Режимы</button>
             <button class="nav-tab" onclick="switchTab('dev')">🔧 Dev</button>
             <button class="nav-tab" onclick="switchTab('stats')">📊 Статы</button>
+        </div>
+
+        <!-- Active RP Scene -->
+        <div class="active-rp" id="activeRP" style="display: none;">
+            <div class="rp-header">
+                <div class="rp-badge" id="rpBadge">АКТИВНАЯ СЦЕНА</div>
+                <div id="rpSceneName">Название сцены</div>
+            </div>
+            <div class="rp-description" id="rpDescription">Описание сцены...</div>
+            <div class="rp-stats" id="rpStats">
+                <!-- Stats will be populated by JavaScript -->
+            </div>
+            <div class="rp-actions" id="rpActions">
+                <!-- Actions will be populated by JavaScript -->
+            </div>
         </div>
 
         <!-- Chat Tab -->
@@ -468,7 +598,7 @@
                     <div class="message">
                         <div class="message-avatar ai-avatar">02</div>
                         <div class="message-content ai-message">
-                            Привет, Дорогой! 💕 Я Zero Two! Готова к общению и приключениям! 🦖
+                            Привет, Дорогой! 💕 Выбери ролевой режим для нашего приключения! 🦖
                         </div>
                     </div>
                 </div>
@@ -484,28 +614,44 @@
             </div>
         </div>
 
-        <!-- Character Tab -->
-        <div id="character-tab" class="tab-content">
-            <div class="scenes-grid">
-                <div class="scene-card" onclick="startScene('forest')">
-                    <div class="scene-icon">🌲</div>
-                    <div class="scene-title">Таинственный лес</div>
-                    <div class="scene-desc">Приключение в древнем лесу</div>
-                </div>
-                <div class="scene-card" onclick="startScene('castle')">
-                    <div class="scene-icon">🏰</div>
-                    <div class="scene-title">Замок дракона</div>
-                    <div class="scene-desc">Опасное путешествие</div>
-                </div>
-                <div class="scene-card" onclick="startScene('starship')">
+        <!-- RP Tab -->
+        <div id="rp-tab" class="tab-content">
+            <div class="rp-scenes">
+                <div class="rp-scene" onclick="startRPScene('strelizia')">
                     <div class="scene-icon">🚀</div>
-                    <div class="scene-title">Космический корабль</div>
-                    <div class="scene-desc">Исследование галактики</div>
+                    <div class="scene-title">Полёт на Стрелиции</div>
+                    <div class="scene-desc">Стань моим напарником в FRANXX</div>
+                    <div class="scene-stats">
+                        <span>⚡ Синхронизация</span>
+                        <span>🎯 Пилотирование</span>
+                    </div>
                 </div>
-                <div class="scene-card" onclick="startScene('detective')">
-                    <div class="scene-icon">🕵️</div>
-                    <div class="scene-title">Детектив</div>
-                    <div class="scene-desc">Расследование преступления</div>
+                <div class="rp-scene" onclick="startRPScene('klaxosaurs')">
+                    <div class="scene-icon">⚔️</div>
+                    <div class="scene-title">Убийство Рёвозавров</div>
+                    <div class="scene-desc">Охота на Конрад-класс в пустошах</div>
+                    <div class="scene-stats">
+                        <span>🦖 Охота</span>
+                        <span>💥 Битва</span>
+                    </div>
+                </div>
+                <div class="rp-scene" onclick="startRPScene('apature')">
+                    <div class="scene-icon">🏙️</div>
+                    <div class="scene-title">Миссия в Апатуре</div>
+                    <div class="scene-desc">Секретная операция в городе</div>
+                    <div class="scene-stats">
+                        <span>🕵️ Скрытность</span>
+                        <span>🎭 Инфильтрация</span>
+                    </div>
+                </div>
+                <div class="rp-scene" onclick="startRPScene('gracia')">
+                    <div class="scene-icon">👑</div>
+                    <div class="scene-title">Битва с Грацией</div>
+                    <div class="scene-desc">Финальная битва за будущее</div>
+                    <div class="scene-stats">
+                        <span>🌟 Эпичность</span>
+                        <span>💫 Судьба</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -569,7 +715,72 @@
         let learnedWords = 0;
         let rpSessions = 0;
         let devModeUnlocked = false;
-        let currentScene = null;
+        let currentRPScene = null;
+        let rpProgress = {};
+
+        // RP Scenes data
+        const rpScenes = {
+            'strelizia': {
+                name: '🚀 Полёт на Стрелиции',
+                description: 'Запуск FRANXX. Пилот: Zero Two. Напарник: Ты, Дорогой!',
+                stats: {
+                    'sync_level': 0,
+                    'damage': 0,
+                    'enemies_defeated': 0
+                },
+                actions: [
+                    { text: '🚀 Занять место пилота', action: 'take_pilot_seat' },
+                    { text: '🔧 Проверить системы', action: 'check_systems' },
+                    { text: '⚡ Начать синхронизацию', action: 'start_sync' },
+                    { text: '❌ Отменить запуск', action: 'cancel_launch' }
+                ]
+            },
+            'klaxosaurs': {
+                name: '⚔️ Убийство Рёвозавров',
+                description: 'Битва с Конрадом. Тип: Рёвозавр Конрад-класса. Локация: Пустошь 26.',
+                stats: {
+                    'sync_level': 65,
+                    'damage': 15,
+                    'enemies_defeated': 0
+                },
+                actions: [
+                    { text: '⚔️ Атаковать с фронта', action: 'attack_front' },
+                    { text: '🎯 Обойти с фланга', action: 'flank_attack' },
+                    { text: '🔍 Искать слабое место', action: 'find_weakness' },
+                    { text: '🏃 Отступить', action: 'retreat' }
+                ]
+            },
+            'apature': {
+                name: '🏙️ Миссия в Апатуре',
+                description: 'Секретная операция в городе. Задание: Разведка территории.',
+                stats: {
+                    'stealth': 100,
+                    'detection': 0,
+                    'objectives': 0
+                },
+                actions: [
+                    { text: '🕳️ Проникнуть через канализацию', action: 'sewer_infiltration' },
+                    { text: '🏠 Использовать крыши', action: 'roof_infiltration' },
+                    { text: '🔓 Найти уязвимость', action: 'find_vulnerability' },
+                    { text: '💥 Создать отвлекающий манёвр', action: 'create_distraction' }
+                ]
+            },
+            'gracia': {
+                name: '👑 Битва с Грацией',
+                description: 'Финальная битва. Противник: Грация. Ставка: Будущее человечества.',
+                stats: {
+                    'boss_health': 100,
+                    'strelizia_health': 85,
+                    'phase': 1
+                },
+                actions: [
+                    { text: '🎯 Координированная атака', action: 'coordinated_attack' },
+                    { text: '🛡️ Защита уязвимых точек', action: 'defend_weakpoints' },
+                    { text: '🌍 Использование окружающей среды', action: 'use_environment' },
+                    { text: '💥 Отчаянный штурм', action: 'desperate_assault' }
+                ]
+            }
+        };
 
         // Tab switching
         function switchTab(tabName) {
@@ -578,9 +789,14 @@
             });
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.classList.remove('active');
+                tab.classList.remove('rp-active');
             });
             document.getElementById(tabName + '-tab').classList.add('active');
             event.target.classList.add('active');
+            
+            if (currentRPScene) {
+                event.target.classList.add('rp-active');
+            }
         }
 
         // Chat functionality
@@ -644,20 +860,130 @@
             return responses[Math.floor(Math.random() * responses.length)];
         }
 
-        // Character Mode
-        function startScene(sceneType) {
+        // RP Scene management
+        function startRPScene(sceneType) {
+            currentRPScene = sceneType;
+            rpProgress = { ...rpScenes[sceneType].stats };
             rpSessions++;
             updateStats();
             
-            const scenes = {
-                'forest': "🌲 *Шепот ветра* Добро пожаловать в Лес Вечной Тайны...",
-                'castle': "🏰 *Рык дракона* Смельчак! Осмелился потревожить мой покой?",
-                'starship': "🚀 *Гул двигателей* Добро пожаловать на борт звездолёта 'Нова'",
-                'detective': "🕵️ *Стук дождя* Новое дело, детектив. Клиент ждёт..."
-            };
-            
+            showActiveRPScene();
             switchTab('chat');
-            addMessage('ai', scenes[sceneType]);
+        }
+
+        function showActiveRPScene() {
+            if (!currentRPScene) {
+                document.getElementById('activeRP').style.display = 'none';
+                return;
+            }
+            
+            const scene = rpScenes[currentRPScene];
+            const activeRP = document.getElementById('activeRP');
+            
+            document.getElementById('rpSceneName').textContent = scene.name;
+            document.getElementById('rpDescription').textContent = scene.description;
+            
+            // Update stats
+            const statsContainer = document.getElementById('rpStats');
+            statsContainer.innerHTML = '';
+            
+            Object.entries(rpProgress).forEach(([key, value]) => {
+                const statElement = document.createElement('div');
+                statElement.className = 'rp-stat';
+                statElement.innerHTML = `
+                    <div class="stat-value">${value}%</div>
+                    <div class="stat-label">${getStatLabel(key)}</div>
+                `;
+                statsContainer.appendChild(statElement);
+            });
+            
+            // Update actions
+            const actionsContainer = document.getElementById('rpActions');
+            actionsContainer.innerHTML = '';
+            
+            scene.actions.forEach(action => {
+                const actionElement = document.createElement('div');
+                actionElement.className = 'rp-action';
+                actionElement.textContent = action.text;
+                actionElement.onclick = () => handleRPAction(action.action);
+                actionsContainer.appendChild(actionElement);
+            });
+            
+            // Add back button
+            const backElement = document.createElement('div');
+            backElement.className = 'rp-action rp-back';
+            backElement.textContent = '🔙 Выйти из РП';
+            backElement.onclick = exitRPScene;
+            actionsContainer.appendChild(backElement);
+            
+            activeRP.style.display = 'block';
+        }
+
+        function getStatLabel(statKey) {
+            const labels = {
+                'sync_level': 'Синхронизация',
+                'damage': 'Повреждения',
+                'enemies_defeated': 'Убито врагов',
+                'stealth': 'Скрытность',
+                'detection': 'Обнаружение',
+                'objectives': 'Цели',
+                'boss_health': 'Здоровье босса',
+                'strelizia_health': 'Здоровье Стрелиции',
+                'phase': 'Фаза'
+            };
+            return labels[statKey] || statKey;
+        }
+
+        function handleRPAction(action) {
+            if (!currentRPScene) return;
+            
+            let response = '';
+            
+            switch(action) {
+                case 'take_pilot_seat':
+                    rpProgress.sync_level = 25;
+                    response = "✅ Место пилота занято! Отлично, Дорогой! Теперь мы команда!";
+                    break;
+                case 'start_sync':
+                    if (rpProgress.sync_level >= 25) {
+                        rpProgress.sync_level = 85;
+                        response = "⚡ Синхронизация 85%! Ты идеальный напарник, Дорогой!";
+                    }
+                    break;
+                case 'attack_front':
+                    rpProgress.enemies_defeated += 1;
+                    rpProgress.damage += 5;
+                    response = "⚔️ Прямая атака! Рёвозавр получил урон!";
+                    break;
+                case 'flank_attack':
+                    rpProgress.enemies_defeated += 2;
+                    response = "🎯 Фланговая атака успешна! Два рёвозавра уничтожены!";
+                    break;
+                default:
+                    response = "Действие выполнено! Продолжаем приключение! 💕";
+            }
+            
+            addMessage('ai', response);
+            showActiveRPScene();
+        }
+
+        function exitRPScene() {
+            const stats = `
+• Уровень синхронизации: ${rpProgress.sync_level || 0}%
+• Убито врагов: ${rpProgress.enemies_defeated || 0}
+• Получено повреждений: ${rpProgress.damage || 0}%
+            `.trim();
+            
+            addMessage('ai', `🎭 Выход из ролевого режима!\n\nСтатистика сессии:\n${stats}\n\nСпасибо за игру, Дорогой! 💕`);
+            
+            currentRPScene = null;
+            rpProgress = {};
+            document.getElementById('activeRP').style.display = 'none';
+            
+            // Update navigation
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('rp-active');
+            });
         }
 
         // Dev Mode
@@ -722,6 +1048,7 @@
 
         // Initialize
         document.getElementById('chatInput').focus();
+        updateStats();
     </script>
 </body>
 </html>

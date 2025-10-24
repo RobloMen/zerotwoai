@@ -18,13 +18,12 @@
             --primary: #ff2d95;
             --secondary: #8a2be2;
             --accent: #ff6b6b;
-            --kazuha: #4ecdc4;
-            --tensorflow: #ff6b00;
+            --dev-mode: #00ff88;
             --dark: #1a1a2e;
             --darker: #0f0f1a;
             --light: #f8f9fa;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --tensorflow-gradient: linear-gradient(135deg, var(--tensorflow), #ff8c00);
+            --dev-gradient: linear-gradient(135deg, var(--dev-mode), #00cc66);
             --glass: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.2);
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -80,9 +79,14 @@
             box-shadow: 0 4px 15px rgba(255, 45, 149, 0.3);
         }
 
-        .nav-button.tensorflow.active {
-            background: var(--tensorflow-gradient);
-            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+        .nav-button.dev-mode {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .nav-button.dev-mode.active {
+            background: var(--dev-gradient);
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
         }
 
         .nav-button:hover {
@@ -104,11 +108,86 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Главный контент */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
+        /* Dev Mode Access */
+        .dev-access {
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .access-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .access-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--light);
+            font-size: 1em;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .access-input:focus {
+            outline: none;
+            border-color: var(--dev-mode);
+            box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
+        }
+
+        .access-button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            background: var(--dev-gradient);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .access-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .access-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .access-success {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            color: #00ff00;
+        }
+
+        .access-error {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #ff4444;
+        }
+
+        /* Dev Mode Content (скрыт по умолчанию) */
+        .dev-content {
+            display: none;
+        }
+
+        .dev-content.active {
+            display: block;
         }
 
         /* Карточки */
@@ -137,8 +216,8 @@
             gap: 10px;
         }
 
-        .card.tensorflow h2 {
-            color: var(--tensorflow);
+        .card.dev-mode h2 {
+            color: var(--dev-mode);
         }
 
         .card h2::before {
@@ -146,9 +225,9 @@
             color: var(--accent);
         }
 
-        .card.tensorflow h2::before {
-            content: '🧠';
-            color: var(--tensorflow);
+        .card.dev-mode h2::before {
+            content: '⚙️';
+            color: var(--dev-mode);
         }
 
         /* TensorFlow специфичные стили */
@@ -160,8 +239,8 @@
         }
 
         .control-group {
-            background: rgba(255, 107, 0, 0.1);
-            border: 1px solid rgba(255, 107, 0, 0.3);
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
             border-radius: 10px;
             padding: 15px;
         }
@@ -170,14 +249,14 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: var(--tensorflow);
+            color: var(--dev-mode);
             font-size: 0.9em;
         }
 
         .control-input {
             width: 100%;
             padding: 8px 12px;
-            border: 1px solid rgba(255, 107, 0, 0.3);
+            border: 1px solid rgba(0, 255, 136, 0.3);
             border-radius: 8px;
             background: rgba(0, 0, 0, 0.3);
             color: var(--light);
@@ -186,24 +265,24 @@
 
         .control-input:focus {
             outline: none;
-            border-color: var(--tensorflow);
+            border-color: var(--dev-mode);
         }
 
         .training-button {
             padding: 12px 20px;
             border: none;
             border-radius: 10px;
-            background: var(--tensorflow-gradient);
+            background: var(--dev-gradient);
             color: white;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
         }
 
         .training-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.4);
         }
 
         .training-button:disabled {
@@ -220,8 +299,8 @@
         }
 
         .stat-card {
-            background: rgba(255, 107, 0, 0.1);
-            border: 1px solid rgba(255, 107, 0, 0.3);
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
             border-radius: 10px;
             padding: 15px;
             text-align: center;
@@ -230,7 +309,7 @@
         .stat-value {
             font-size: 1.5em;
             font-weight: 800;
-            color: var(--tensorflow);
+            color: var(--dev-mode);
             display: block;
         }
 
@@ -242,7 +321,7 @@
 
         .training-log {
             background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 107, 0, 0.3);
+            border: 1px solid rgba(0, 255, 136, 0.3);
             border-radius: 10px;
             padding: 15px;
             height: 200px;
@@ -284,7 +363,7 @@
 
         .progress-fill {
             height: 100%;
-            background: var(--tensorflow-gradient);
+            background: var(--dev-gradient);
             border-radius: 4px;
             transition: width 0.3s ease;
             width: 0%;
@@ -292,7 +371,7 @@
 
         .neural-network-viz {
             background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 107, 0, 0.3);
+            border: 1px solid rgba(0, 255, 136, 0.3);
             border-radius: 10px;
             padding: 20px;
             margin-top: 20px;
@@ -305,7 +384,7 @@
             position: absolute;
             width: 12px;
             height: 12px;
-            background: var(--tensorflow);
+            background: var(--dev-mode);
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
@@ -313,7 +392,7 @@
         .connection {
             position: absolute;
             height: 2px;
-            background: rgba(255, 107, 0, 0.5);
+            background: rgba(0, 255, 136, 0.5);
             transform-origin: 0 0;
         }
 
@@ -330,154 +409,167 @@
         <!-- Навигация -->
         <div class="navigation" style="grid-column: 1 / -1;">
             <button class="nav-button active" onclick="switchTab('main')">Zero Two AI</button>
-            <button class="nav-button tensorflow" onclick="switchTab('tensorflow')">TensorFlow Обучение</button>
+            <button class="nav-button dev-mode" onclick="switchTab('dev')">Dev Mode</button>
         </div>
 
-        <!-- Вкладка TensorFlow обучения -->
-        <div id="tensorflow-tab" class="tab-content active">
-            <div class="main-content">
-                <header class="header" style="background: rgba(255, 107, 0, 0.1); border: 1px solid rgba(255, 107, 0, 0.3);">
-                    <h1 class="title" style="background: var(--tensorflow-gradient); -webkit-background-clip: text;">TensorFlow.js Обучение</h1>
-                    <p class="subtitle">Нейросетевое обучение в реальном времени в браузере</p>
-                    <div class="badge" style="background: var(--tensorflow-gradient);">TensorFlow.js • Обучение в реальном времени</div>
-                </header>
-
-                <!-- Управление обучением -->
-                <section class="card tensorflow">
-                    <h2>⚙️ Управление обучением</h2>
-                    <div class="training-controls">
-                        <div class="control-group">
-                            <label class="control-label">Эпохи обучения</label>
-                            <input type="number" class="control-input" id="epochs" value="50" min="1" max="1000">
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Размер батча</label>
-                            <input type="number" class="control-input" id="batchSize" value="32" min="1" max="128">
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Скорость обучения</label>
-                            <input type="number" class="control-input" id="learningRate" value="0.001" step="0.001" min="0.0001" max="0.1">
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Размер скрытого слоя</label>
-                            <input type="number" class="control-input" id="hiddenUnits" value="128" min="16" max="512">
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="training-button" onclick="startTraining()" id="trainButton">🎯 Начать обучение</button>
-                        <button class="training-button" onclick="stopTraining()" id="stopButton" disabled>⏹️ Остановить</button>
-                        <button class="training-button" onclick="resetModel()" id="resetButton">🔄 Сбросить модель</button>
-                    </div>
-                </section>
-
-                <!-- Статистика модели -->
-                <section class="card tensorflow">
-                    <h2>📊 Статистика модели</h2>
-                    <div class="model-stats">
-                        <div class="stat-card">
-                            <span class="stat-value" id="currentEpoch">0</span>
-                            <span class="stat-label">Текущая эпоха</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-value" id="currentLoss">0.0000</span>
-                            <span class="stat-label">Потери</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-value" id="currentAccuracy">0%</span>
-                            <span class="stat-label">Точность</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-value" id="trainingTime">0s</span>
-                            <span class="stat-label">Время обучения</span>
-                        </div>
-                    </div>
-                    <div class="training-progress">
-                        <div class="progress-fill" id="trainingProgress"></div>
-                    </div>
-                </section>
-
-                <!-- Визуализация нейросети -->
-                <section class="card tensorflow">
-                    <h2>🔍 Визуализация нейросети</h2>
-                    <div class="neural-network-viz" id="networkViz">
-                        <!-- Нейроны и связи будут генерироваться JavaScript -->
-                    </div>
-                </section>
-
-                <!-- Лог обучения -->
-                <section class="card tensorflow">
-                    <h2>📝 Лог обучения</h2>
-                    <div class="training-log" id="trainingLog">
-                        <div class="log-entry log-info">Система TensorFlow.js инициализирована</div>
-                        <div class="log-entry log-info">Готов к обучению нейросети</div>
-                    </div>
-                </section>
-
-                <!-- Тестирование модели -->
-                <section class="card tensorflow">
-                    <h2>🧪 Тестирование модели</h2>
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <input type="text" class="control-input" id="testInput" placeholder="Введите текст для теста..." style="flex: 1;">
-                        <button class="training-button" onclick="testModel()" id="testButton">Тестировать</button>
-                    </div>
-                    <div id="testResults" style="background: rgba(255, 107, 0, 0.1); border-radius: 10px; padding: 15px; min-height: 60px;">
-                        Результаты тестирования появятся здесь...
-                    </div>
-                </section>
+        <!-- Вкладка Dev Mode -->
+        <div id="dev-tab" class="tab-content active">
+            <!-- Форма доступа -->
+            <div class="dev-access" id="devAccess">
+                <div class="access-form">
+                    <h2 style="color: var(--dev-mode); margin-bottom: 20px;">🔐 Dev Mode Access</h2>
+                    <input type="password" class="access-input" id="devPassword" placeholder="Enter access code" autocomplete="off">
+                    <button class="access-button" onclick="checkDevAccess()">Access System</button>
+                    <div class="access-message" id="accessMessage"></div>
+                </div>
             </div>
 
-            <!-- Боковая панель -->
-            <div class="chat-sidebar">
-                <!-- Информация о модели -->
-                <div class="card tensorflow">
-                    <h2>🧠 Архитектура модели</h2>
-                    <div class="model-stats">
-                        <div class="stat-card">
-                            <span class="stat-value" id="modelLayers">3</span>
-                            <span class="stat-label">Слоя</span>
+            <!-- Контент Dev Mode (скрыт до ввода пароля) -->
+            <div class="dev-content" id="devContent">
+                <div class="main-content">
+                    <header class="header" style="background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.3);">
+                        <h1 class="title" style="background: var(--dev-gradient); -webkit-background-clip: text;">TensorFlow.js Dev Mode</h1>
+                        <p class="subtitle">Нейросетевое обучение в реальном времени в браузере</p>
+                        <div class="badge" style="background: var(--dev-gradient);">TensorFlow.js • Dev Mode • Обучение в реальном времени</div>
+                    </header>
+
+                    <!-- Управление обучением -->
+                    <section class="card dev-mode">
+                        <h2>⚙️ Управление обучением</h2>
+                        <div class="training-controls">
+                            <div class="control-group">
+                                <label class="control-label">Эпохи обучения</label>
+                                <input type="number" class="control-input" id="epochs" value="50" min="1" max="1000">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Размер батча</label>
+                                <input type="number" class="control-input" id="batchSize" value="32" min="1" max="128">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Скорость обучения</label>
+                                <input type="number" class="control-input" id="learningRate" value="0.001" step="0.001" min="0.0001" max="0.1">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Размер скрытого слоя</label>
+                                <input type="number" class="control-input" id="hiddenUnits" value="128" min="16" max="512">
+                            </div>
                         </div>
-                        <div class="stat-card">
-                            <span class="stat-value" id="totalParams">0</span>
-                            <span class="stat-label">Параметров</span>
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button class="training-button" onclick="startTraining()" id="trainButton">🎯 Начать обучение</button>
+                            <button class="training-button" onclick="stopTraining()" id="stopButton" disabled>⏹️ Остановить</button>
+                            <button class="training-button" onclick="resetModel()" id="resetButton">🔄 Сбросить модель</button>
                         </div>
-                        <div class="stat-card">
-                            <span class="stat-value" id="vocabSize">1000</span>
-                            <span class="stat-label">Слов в словаре</span>
+                    </section>
+
+                    <!-- Статистика модели -->
+                    <section class="card dev-mode">
+                        <h2>📊 Статистика модели</h2>
+                        <div class="model-stats">
+                            <div class="stat-card">
+                                <span class="stat-value" id="currentEpoch">0</span>
+                                <span class="stat-label">Текущая эпоха</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-value" id="currentLoss">0.0000</span>
+                                <span class="stat-label">Потери</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-value" id="currentAccuracy">0%</span>
+                                <span class="stat-label">Точность</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-value" id="trainingTime">0s</span>
+                                <span class="stat-label">Время обучения</span>
+                            </div>
                         </div>
-                    </div>
-                    <div style="margin-top: 15px; font-size: 0.9em;">
-                        <strong>Тип модели:</strong> LSTM + Dense<br>
-                        <strong>Активация:</strong> ReLU + Softmax<br>
-                        <strong>Оптимизатор:</strong> Adam
-                    </div>
+                        <div class="training-progress">
+                            <div class="progress-fill" id="trainingProgress"></div>
+                        </div>
+                    </section>
+
+                    <!-- Визуализация нейросети -->
+                    <section class="card dev-mode">
+                        <h2>🔍 Визуализация нейросети</h2>
+                        <div class="neural-network-viz" id="networkViz">
+                            <!-- Нейроны и связи будут генерироваться JavaScript -->
+                        </div>
+                    </section>
+
+                    <!-- Лог обучения -->
+                    <section class="card dev-mode">
+                        <h2>📝 Лог обучения</h2>
+                        <div class="training-log" id="trainingLog">
+                            <div class="log-entry log-info">Система TensorFlow.js инициализирована</div>
+                            <div class="log-entry log-info">Готов к обучению нейросети</div>
+                        </div>
+                    </section>
+
+                    <!-- Тестирование модели -->
+                    <section class="card dev-mode">
+                        <h2>🧪 Тестирование модели</h2>
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                            <input type="text" class="control-input" id="testInput" placeholder="Введите текст для теста..." style="flex: 1;">
+                            <button class="training-button" onclick="testModel()" id="testButton">Тестировать</button>
+                        </div>
+                        <div id="testResults" style="background: rgba(0, 255, 136, 0.1); border-radius: 10px; padding: 15px; min-height: 60px;">
+                            Результаты тестирования появятся здесь...
+                        </div>
+                    </section>
                 </div>
 
-                <!-- Данные обучения -->
-                <div class="card tensorflow">
-                    <h2>📚 Данные обучения</h2>
-                    <div class="model-stats">
-                        <div class="stat-card">
-                            <span class="stat-value" id="trainingSamples">500</span>
-                            <span class="stat-label">Примеров</span>
+                <!-- Боковая панель -->
+                <div class="chat-sidebar">
+                    <!-- Информация о модели -->
+                    <div class="card dev-mode">
+                        <h2>🧠 Архитектура модели</h2>
+                        <div class="model-stats">
+                            <div class="stat-card">
+                                <span class="stat-value" id="modelLayers">3</span>
+                                <span class="stat-label">Слоя</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-value" id="totalParams">0</span>
+                                <span class="stat-label">Параметров</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-value" id="vocabSize">1000</span>
+                                <span class="stat-label">Слов в словаре</span>
+                            </div>
                         </div>
-                        <div class="stat-card">
-                            <span class="stat-value" id="validationSplit">20%</span>
-                            <span class="stat-label">Валидация</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-value" id="dataSize">150KB</span>
-                            <span class="stat-label">Размер данных</span>
+                        <div style="margin-top: 15px; font-size: 0.9em;">
+                            <strong>Тип модели:</strong> LSTM + Dense<br>
+                            <strong>Активация:</strong> ReLU + Softmax<br>
+                            <strong>Оптимизатор:</strong> Adam
                         </div>
                     </div>
-                </div>
 
-                <!-- Экспорт модели -->
-                <div class="card tensorflow">
-                    <h2>💾 Экспорт модели</h2>
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <button class="training-button" onclick="saveModel()">💾 Сохранить модель</button>
-                        <button class="training-button" onclick="loadModel()">📂 Загрузить модель</button>
-                        <button class="training-button" onclick="exportModel()">📤 Экспорт в JSON</button>
+                    <!-- Данные обучения -->
+                    <div class="card dev-mode">
+                        <h2>📚 Данные обучения</h2>
+                        <div class="model-stats">
+                            <div class="stat-card">
+                                <span class="stat-value" id="trainingSamples">500</span>
+                                <span class="stat-label">Примеров</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-value" id="validationSplit">20%</span>
+                                <span class="stat-label">Валидация</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-value" id="dataSize">150KB</span>
+                                <span class="stat-label">Размер данных</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Экспорт модели -->
+                    <div class="card dev-mode">
+                        <h2>💾 Экспорт модели</h2>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button class="training-button" onclick="saveModel()">💾 Сохранить модель</button>
+                            <button class="training-button" onclick="loadModel()">📂 Загрузить модель</button>
+                            <button class="training-button" onclick="exportModel()">📤 Экспорт в JSON</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -485,6 +577,47 @@
     </div>
 
     <script>
+        // Система доступа к Dev Mode
+        const DEV_PASSWORD = "ZTDfK";
+        let devModeUnlocked = false;
+
+        function checkDevAccess() {
+            const passwordInput = document.getElementById('devPassword');
+            const messageDiv = document.getElementById('accessMessage');
+            const enteredPassword = passwordInput.value.trim();
+
+            if (enteredPassword === DEV_PASSWORD) {
+                devModeUnlocked = true;
+                messageDiv.textContent = "✓ Доступ разрешен";
+                messageDiv.className = "access-message access-success";
+                messageDiv.style.display = 'block';
+                
+                // Прячем форму доступа и показываем контент
+                setTimeout(() => {
+                    document.getElementById('devAccess').style.display = 'none';
+                    document.getElementById('devContent').classList.add('active');
+                    addLog('Dev Mode активирован', 'info');
+                }, 1000);
+            } else {
+                messageDiv.textContent = "Неверный код доступа";
+                messageDiv.className = "access-message access-error";
+                messageDiv.style.display = 'block';
+                passwordInput.value = '';
+                
+                // Вибрация при ошибке (если поддерживается)
+                if (navigator.vibrate) {
+                    navigator.vibrate(200);
+                }
+            }
+        }
+
+        // Обработка Enter в поле пароля
+        document.getElementById('devPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkDevAccess();
+            }
+        });
+
         // TensorFlow.js система обучения
         let model;
         let isTraining = false;
@@ -567,7 +700,6 @@
                 "данные для тренировки моделей машинного обучения",
                 "алгоритмы и структуры данных в программировании",
                 "веб разработка и мобильные приложения",
-                // Добавляем больше разнообразных данных
                 "сегодня солнечный день и я счастлив",
                 "машинное обучение изменяет мир технологий",
                 "python лучший язык для анализа данных",
@@ -588,6 +720,11 @@
 
         // Начало обучения
         async function startTraining() {
+            if (!devModeUnlocked) {
+                addLog('Требуется доступ к Dev Mode', 'error');
+                return;
+            }
+            
             if (isTraining) return;
             
             isTraining = true;
@@ -688,6 +825,11 @@
 
         // Тестирование модели
         async function testModel() {
+            if (!devModeUnlocked) {
+                addLog('Требуется доступ к Dev Mode', 'error');
+                return;
+            }
+            
             if (!model) {
                 addLog('Модель не обучена!', 'error');
                 return;
@@ -837,6 +979,11 @@
 
         // Сохранение модели
         async function saveModel() {
+            if (!devModeUnlocked) {
+                addLog('Требуется доступ к Dev Mode', 'error');
+                return;
+            }
+            
             if (!model) {
                 addLog('Нет модели для сохранения', 'error');
                 return;
@@ -852,12 +999,21 @@
 
         // Загрузка модели
         async function loadModel() {
-            // В реальном приложении здесь была бы загрузка файла
+            if (!devModeUnlocked) {
+                addLog('Требуется доступ к Dev Mode', 'error');
+                return;
+            }
+            
             addLog('Функция загрузки модели в разработке', 'info');
         }
 
         // Экспорт модели
         function exportModel() {
+            if (!devModeUnlocked) {
+                addLog('Требуется доступ к Dev Mode', 'error');
+                return;
+            }
+            
             if (!model) {
                 addLog('Нет модели для экспорта', 'error');
                 return;
@@ -900,9 +1056,11 @@
 
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
-            addLog('TensorFlow.js загружен и готов к работе', 'info');
-            visualizeNetwork();
-            generateTrainingData();
+            if (devModeUnlocked) {
+                addLog('TensorFlow.js загружен и готов к работе', 'info');
+                visualizeNetwork();
+                generateTrainingData();
+            }
         });
     </script>
 </body>

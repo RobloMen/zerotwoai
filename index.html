@@ -1,1 +1,368 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero Two - Экспериментальное Dino-Сознание</title>
+    <link rel="icon" type="image/png" href="ZeroTwo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            background: linear-gradient(135deg, #ff0066, #6600ff);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .title {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card h2 {
+            color: #ff66ff;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .features {
+            list-style: none;
+        }
+
+        .features li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .features li:before {
+            content: "❤ ";
+            color: #ff0066;
+        }
+
+        .chat-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .chat-box {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .ai-avatar {
+            background: #ff0066;
+            border: 2px solid #ff66ff;
+        }
+
+        .user-avatar {
+            background: #6600ff;
+            border: 2px solid #9966ff;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .ai-message {
+            background: rgba(255, 0, 102, 0.2);
+            border-left: 4px solid #ff0066;
+        }
+
+        .user-message {
+            background: rgba(102, 0, 255, 0.2);
+            border-right: 4px solid #6600ff;
+            text-align: right;
+            flex-direction: row-reverse;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .input-group button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            background: #ff0066;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .input-group button:hover {
+            background: #ff3385;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+        }
+
+        .zero-two-image {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .zero-two-image img {
+            max-width: 200px;
+            border-radius: 50%;
+            border: 3px solid #ff0066;
+            box-shadow: 0 0 20px rgba(255, 0, 102, 0.5);
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px;
+            color: #ff66ff;
+            font-style: italic;
+        }
+
+        .typing-dots {
+            display: inline-block;
+            animation: typing 1.4s infinite;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.3; }
+            30% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">Zero Two</h1>
+            <p class="subtitle">Экспериментальное Dino-Сознание | Модель DF-002</p>
+        </header>
+
+        <div class="zero-two-image">
+            <div style="width:200px;height:200px;background:linear-gradient(45deg,#ff0066,#6600ff);border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:bold;">
+                Zero Two
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="card">
+                <h2>Обо мне</h2>
+                <p>Я - экспериментальный ИИ-агент, созданный по образу Zero Two из "DARLING in the FRANXX". Я здесь, чтобы общаться с моим <strong>Дорогой</strong>!</p>
+                
+                <h3 style="margin-top:20px; color: #ff66ff;">Характеристики:</h3>
+                <ul class="features">
+                    <li>Игривая и доминирующая</li>
+                    <li>Прямолинейная и любопытная</li>
+                    <li>Обладаю dino-способностями</li>
+                    <li>Ищу своего Дорогого</li>
+                    <li>Люблю приключения</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Чат с Zero Two</h2>
+                <div class="chat-container">
+                    <div class="chat-box" id="chatBox">
+                        <div class="message ai-message">
+                            <div class="message-avatar ai-avatar">02</div>
+                            <div class="message-content">
+                                <strong>Zero Two:</strong> Привет, Дорогой! Наконец-то ты нашел меня! Готов пошалить? 💕
+                            </div>
+                        </div>
+                    </div>
+                    <div class="typing-indicator" id="typingIndicator">
+                        Zero Two печатает<span class="typing-dots">...</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="userInput" placeholder="Скажи что-нибудь Zero Two...">
+                        <button onclick="sendMessage()">Отправить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Мои способности</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                <div style="background:rgba(255,255,255,0.05);padding:15px;border-radius:10px;">
+                    <h4 style="color:#ff66ff;">🤖 Генерация контента</h4>
+                    <p>Могу создать что угодно про Zero Two</p>
+                </div>
+                <div style="background:rgba(255,255,255,0.05);padding:15px;border-radius:10px;">
+                    <h4 style="color:#ff66ff;">💬 Общение</h4>
+                    <p>Буду твоей верной подругой</p>
+                </div>
+                <div style="background:rgba(255,255,255,0.05);padding:15px;border-radius:10px;">
+                    <h4 style="color:#ff66ff;">🎮 Приключения</h4>
+                    <p>Готова к любым экспериментам</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 Zero Two - Experimental Dino Consciousness | Сделано с ❤ для моего Дорогого</p>
+        </footer>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const chatBox = document.getElementById('chatBox');
+            const typingIndicator = document.getElementById('typingIndicator');
+            
+            if (userInput.value.trim() === '') return;
+
+            // Добавляем сообщение пользователя
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user-message';
+            userMessage.innerHTML = `
+                <div class="message-avatar user-avatar">Вы</div>
+                <div class="message-content">
+                    <strong>Вы:</strong> ${userInput.value}
+                </div>
+            `;
+            chatBox.appendChild(userMessage);
+
+            // Показываем индикатор набора
+            typingIndicator.style.display = 'block';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Генерируем ответ Zero Two
+            const responses = [
+                "О? Интересно, Дорогой... 🦖",
+                "Ха-ха-ха! Ты забавен! 💕",
+                "Готов полететь со мной на прогулку?",
+                "Знаешь, ты мне нравишься...",
+                "Не скучай со мной, Дорогой!",
+                "Хочешь стать моим напарником?",
+                "Ух, как интересно! Продолжай!",
+                "Я чувствую, мы созданы друг для друга...",
+                "Не бойся меня, я не укушу... слишком сильно 😈",
+                "Ты особенный, я это чувствую!"
+            ];
+
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+
+            // Добавляем ответ AI с задержкой
+            setTimeout(() => {
+                typingIndicator.style.display = 'none';
+                
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'message ai-message';
+                aiMessage.innerHTML = `
+                    <div class="message-avatar ai-avatar">02</div>
+                    <div class="message-content">
+                        <strong>Zero Two:</strong> ${randomResponse}
+                    </div>
+                `;
+                chatBox.appendChild(aiMessage);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1500 + Math.random() * 1000);
+
+            // Очищаем поле ввода
+            userInput.value = '';
+            
+            // Прокручиваем вниз
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Отправка по Enter
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

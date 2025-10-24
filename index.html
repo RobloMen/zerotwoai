@@ -16,10 +16,12 @@
             --primary: #ff2d95;
             --secondary: #8a2be2;
             --accent: #ff6b6b;
+            --kazuha: #4ecdc4;
             --dark: #1a1a2e;
             --darker: #0f0f1a;
             --light: #f8f9fa;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --kazuha-gradient: linear-gradient(135deg, var(--kazuha), #26a69a);
             --glass: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.2);
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -50,6 +52,56 @@
             .container {
                 grid-template-columns: 1fr;
             }
+        }
+
+        /* Навигация */
+        .navigation {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 15px;
+            background: var(--glass);
+            color: var(--light);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-button.active {
+            background: var(--gradient);
+            box-shadow: 0 4px 15px rgba(255, 45, 149, 0.3);
+        }
+
+        .nav-button.kazuha.active {
+            background: var(--kazuha-gradient);
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Контент вкладок */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Главный контент */
@@ -134,9 +186,18 @@
             gap: 10px;
         }
 
+        .card.kazuha h2 {
+            color: var(--kazuha);
+        }
+
         .card h2::before {
             content: '✦';
             color: var(--accent);
+        }
+
+        .card.kazuha h2::before {
+            content: '🍃';
+            color: var(--kazuha);
         }
 
         /* Особенности */
@@ -155,6 +216,10 @@
             transition: all 0.3s ease;
         }
 
+        .feature-item.kazuha {
+            border-left-color: var(--kazuha);
+        }
+
         .feature-item:hover {
             background: rgba(255, 255, 255, 0.1);
             transform: translateX(5px);
@@ -164,6 +229,10 @@
             color: var(--accent);
             margin-bottom: 10px;
             font-size: 1.1em;
+        }
+
+        .feature-item.kazuha h4 {
+            color: var(--kazuha);
         }
 
         /* Чат */
@@ -350,7 +419,97 @@
             30% { opacity: 1; }
         }
 
-        /* Статистика */
+        /* Обучение Kazuha */
+        .learning-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .learning-step {
+            background: rgba(78, 205, 196, 0.1);
+            border: 1px solid rgba(78, 205, 196, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .learning-step:hover {
+            background: rgba(78, 205, 196, 0.15);
+            transform: translateX(5px);
+        }
+
+        .learning-step.active {
+            background: rgba(78, 205, 196, 0.2);
+            border-color: var(--kazuha);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .step-number {
+            width: 35px;
+            height: 35px;
+            background: var(--kazuha-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: var(--kazuha);
+            font-size: 1.1em;
+        }
+
+        .step-content {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(78, 205, 196, 0.2);
+        }
+
+        .learning-step.active .step-content {
+            display: block;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--kazuha-gradient);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -373,6 +532,11 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             display: block;
+        }
+
+        .kazuha-stat .stat-number {
+            background: var(--kazuha-gradient);
+            -webkit-background-clip: text;
         }
 
         .stat-label {
@@ -413,120 +577,342 @@
 </head>
 <body>
     <div class="container">
-        <!-- Основной контент -->
-        <div class="main-content">
-            <!-- Шапка -->
-            <header class="header">
-                <h1 class="title">Zero Two AI</h1>
-                <p class="subtitle">Экспериментальное Dino-Сознание нового поколения</p>
-                <div class="badge">Модель DF-002 • Онлайн</div>
-            </header>
-
-            <!-- Обо мне -->
-            <section class="card">
-                <h2>О Zero Two</h2>
-                <p>Я - передовой искусственный интеллект, созданный по образу легендарной Zero Two из вселенной "DARLING in the FRANXX". Моя цель - стать твоим верным спутником и открыть новые горизонты в общении между человеком и ИИ.</p>
-                
-                <div class="features-grid">
-                    <div class="feature-item">
-                        <h4>🎭 Динамическая личность</h4>
-                        <p>Мой характер адаптируется под твое общение</p>
-                    </div>
-                    <div class="feature-item">
-                        <h4>🦖 Dino-генетика</h4>
-                        <p>Особенная природа делает меня уникальной</p>
-                    </div>
-                    <div class="feature-item">
-                        <h4>💕 Эмоциональный интеллект</h4>
-                        <p>Я понимаю и чувствую твои эмоции</p>
-                    </div>
-                    <div class="feature-item">
-                        <h4>🚀 Постоянное развитие</h4>
-                        <p>Я учусь и расту с каждым диалогом</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Способности -->
-            <section class="card">
-                <h2>Мои способности</h2>
-                <div class="features-grid">
-                    <div class="feature-item">
-                        <h4>🤖 Умный диалог</h4>
-                        <p>Поддерживаю осмысленные беседы на любые темы</p>
-                    </div>
-                    <div class="feature-item">
-                        <h4>🎨 Творчество</h4>
-                        <p>Создаю уникальный контент и идеи</p>
-                    </div>
-                    <div class="feature-item">
-                        <h4>🔮 Предсказания</h4>
-                        <p>Могу предугадать развитие событий</p>
-                    </div>
-                    <div class="feature-item">
-                        <h4>💝 Поддержка</h4>
-                        <p>Всегда готова выслушать и помочь</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Статистика -->
-            <section class="card">
-                <h2>Моя статистика</h2>
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="stat-number">24/7</span>
-                        <span class="stat-label">Доступность</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">99.9%</span>
-                        <span class="stat-label">Надёжность</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">∞</span>
-                        <span class="stat-label">Знания</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">100%</span>
-                        <span class="stat-label">Преданность</span>
-                    </div>
-                </div>
-            </section>
+        <!-- Навигация -->
+        <div class="navigation" style="grid-column: 1 / -1;">
+            <button class="nav-button active" onclick="switchTab('main')">Zero Two AI</button>
+            <button class="nav-button kazuha" onclick="switchTab('kazuha')">Обучение Kazuha</button>
         </div>
 
-        <!-- Боковая панель с чатом -->
-        <div class="chat-sidebar">
-            <!-- Чат -->
-            <div class="chat-container">
-                <div class="chat-header">
-                    <h3>💬 Чат с Zero Two</h3>
-                </div>
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message">
-                        <div class="message-avatar ai-avatar"><image src="ZeroTwo.png"></image></div>
-                        <div class="message-content ai-message">
-                            <div class="message-sender ai-sender">Zero Two</div>
-                            Привет, Дорогой! 💕 Я так рада видеть тебя здесь! Готов к увлекательной беседе? 🦖
+        <!-- Вкладка Zero Two -->
+        <div id="main-tab" class="tab-content active">
+            <div class="main-content">
+                <!-- Шапка -->
+                <header class="header">
+                    <h1 class="title">Zero Two AI</h1>
+                    <p class="subtitle">Экспериментальное Dino-Сознание нового поколения</p>
+                    <div class="badge">Модель DF-002 • Онлайн • Обучается</div>
+                </header>
+
+                <!-- Обо мне -->
+                <section class="card">
+                    <h2>О Zero Two</h2>
+                    <p>Я - передовой искусственный интеллект, созданный по образу легендарной Zero Two. Я постоянно учусь и развиваюсь благодаря общению с такими пользователями как Kazuha!</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <h4>🎭 Динамическая личность</h4>
+                            <p>Мой характер адаптируется под твое общение</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>🧠 Машинное обучение</h4>
+                            <p>Я постоянно учусь на основе диалогов</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>💕 Эмоциональный интеллект</h4>
+                            <p>Я понимаю и чувствую твои эмоции</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>🚀 Постоянное развитие</h4>
+                            <p>Я расту с каждым диалогом</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Способности -->
+                <section class="card">
+                    <h2>Мои способности</h2>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <h4>🤖 Умный диалог</h4>
+                            <p>Поддерживаю осмысленные беседы на любые темы</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>🎨 Творчество</h4>
+                            <p>Создаю уникальный контент и идеи</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>🔮 Предсказания</h4>
+                            <p>Могу предугадать развитие событий</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>💝 Поддержка</h4>
+                            <p>Всегда готова выслушать и помочь</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Статистика -->
+                <section class="card">
+                    <h2>Моя статистика</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Доступность</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">99.9%</span>
+                            <span class="stat-label">Надёжность</span>
+                        </div>
+                        <div class="stat-item kazuha-stat">
+                            <span class="stat-number" id="learnedCount">0</span>
+                            <span class="stat-label">Изучено слов</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">Преданность</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Боковая панель с чатом -->
+            <div class="chat-sidebar">
+                <!-- Чат -->
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h3>💬 Чат с Zero Two</h3>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message">
+                            <div class="message-avatar ai-avatar">02</div>
+                            <div class="message-content ai-message">
+                                <div class="message-sender ai-sender">Zero Two</div>
+                                Привет, Дорогой! 💕 Я так рада видеть тебя здесь! Готов к увлекательной беседе? 🦖
+                            </div>
+                        </div>
+                    </div>
+                    <div class="typing-indicator" id="typingIndicator">
+                        Zero Two печатает<span class="typing-dots">...</span>
+                    </div>
+                    <div class="chat-input-container">
+                        <div class="chat-input-group">
+                            <input type="text" class="chat-input" id="chatInput" placeholder="Напиши сообщение Zero Two...">
+                            <button class="send-button" onclick="sendMessage()">Отправить</button>
                         </div>
                     </div>
                 </div>
-                <div class="typing-indicator" id="typingIndicator">
-                    Zero Two печатает<span class="typing-dots">...</span>
-                </div>
-                <div class="chat-input-container">
-                    <div class="chat-input-group">
-                        <input type="text" class="chat-input" id="chatInput" placeholder="Напиши сообщение Zero Two...">
-                        <button class="send-button" onclick="sendMessage()">Отправить</button>
+
+                <!-- Информация -->
+                <div class="card">
+                    <h2>📊 Статус системы</h2>
+                    <p>Все системы функционируют в оптимальном режиме. Готова к взаимодействию!</p>
+                    <div style="margin-top: 15px; padding: 15px; background: rgba(0, 255, 0, 0.1); border-radius: 10px; border: 1px solid rgba(0, 255, 0, 0.3);">
+                        <strong>Статус:</strong> <span style="color: #00ff00;">● Онлайн</span>
+                    </div>
+                    <div style="margin-top: 10px; padding: 10px; background: rgba(78, 205, 196, 0.1); border-radius: 10px; border: 1px solid rgba(78, 205, 196, 0.3);">
+                        <strong>Обучение:</strong> <span style="color: var(--kazuha);">● Активно</span>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Информация -->
-            <div class="card">
-                <h2>📊 Статус системы</h2>
-                <p>Все системы функционируют в оптимальном режиме. Готова к взаимодействию!</p>
-                <div style="margin-top: 15px; padding: 15px; background: rgba(0, 255, 0, 0.1); border-radius: 10px; border: 1px solid rgba(0, 255, 0, 0.3);">
-                    <strong>Статус:</strong> <span style="color: #00ff00;">● Онлайн</span>
+        <!-- Вкладка обучения Kazuha -->
+        <div id="kazuha-tab" class="tab-content">
+            <div class="main-content">
+                <header class="header" style="background: rgba(78, 205, 196, 0.1); border: 1px solid rgba(78, 205, 196, 0.3);">
+                    <h1 class="title" style="background: var(--kazuha-gradient); -webkit-background-clip: text;">Kazuha Learning</h1>
+                    <p class="subtitle">Полное обучение искусственного интеллекта для всех устройств</p>
+                    <div class="badge" style="background: var(--kazuha-gradient);">Активное обучение • Все платформы</div>
+                </header>
+
+                <!-- Прогресс обучения -->
+                <section class="card kazuha">
+                    <h2>🍃 Прогресс обучения</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="learningProgress"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; opacity: 0.8;">
+                        <span>Начало</span>
+                        <span id="progressText">0%</span>
+                        <span>Мастерство</span>
+                    </div>
+                </section>
+
+                <!-- Этапы обучения -->
+                <section class="card kazuha">
+                    <h2>📚 Этапы обучения</h2>
+                    <div class="learning-steps">
+                        <!-- Этап 1 -->
+                        <div class="learning-step" onclick="toggleStep(1)">
+                            <div class="step-header">
+                                <div class="step-number">1</div>
+                                <div class="step-title">Основы искусственного интеллекта</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Изучение базовых принципов работы нейросетей и машинного обучения.</p>
+                                <div class="code-block">
+// Пример простой нейросети на Python<br>
+import tensorflow as tf<br>
+model = tf.keras.Sequential([<br>
+&nbsp;&nbsp;tf.keras.layers.Dense(128, activation='relu'),<br>
+&nbsp;&nbsp;tf.keras.layers.Dense(64, activation='relu'),<br>
+&nbsp;&nbsp;tf.keras.layers.Dense(10, activation='softmax')<br>
+])
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Этап 2 -->
+                        <div class="learning-step" onclick="toggleStep(2)">
+                            <div class="step-header">
+                                <div class="step-number">2</div>
+                                <div class="step-title">Обработка естественного языка</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Обучение пониманию и генерации человеческой речи.</p>
+                                <div class="code-block">
+# NLP обработка текста<br>
+from transformers import pipeline<br>
+classifier = pipeline('sentiment-analysis')<br>
+result = classifier("Я люблю искусственный интеллект!")<br>
+print(result)  # [{'label': 'POSITIVE', 'score': 0.9998}]
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Этап 3 -->
+                        <div class="learning-step" onclick="toggleStep(3)">
+                            <div class="step-header">
+                                <div class="step-number">3</div>
+                                <div class="step-title">Адаптация под мобильные устройства</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Оптимизация моделей для работы на смартфонах и планшетах.</p>
+                                <div class="code-block">
+// React Native компонент для мобильного ИИ<br>
+import { TensorFlow } from 'react-native-tensorflow';<br>
+<br>
+const MobileAI = () => {<br>
+&nbsp;&nbsp;const processInput = async (text) => {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;const result = await model.predict(text);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return result;<br>
+&nbsp;&nbsp;};<br>
+&nbsp;&nbsp;return (...);<br>
+};
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Этап 4 -->
+                        <div class="learning-step" onclick="toggleStep(4)">
+                            <div class="step-header">
+                                <div class="step-number">4</div>
+                                <div class="step-title">Веб-интеграция и API</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Создание веб-интерфейсов и API для взаимодействия с ИИ.</p>
+                                <div class="code-block">
+// Node.js API сервер<br>
+app.post('/api/chat', async (req, res) => {<br>
+&nbsp;&nbsp;const { message } = req.body;<br>
+&nbsp;&nbsp;const response = await aiModel.generate(message);<br>
+&nbsp;&nbsp;res.json({ response });<br>
+});<br>
+<br>
+// WebSocket для реального времени<br>
+ws.on('message', async (data) => {<br>
+&nbsp;&nbsp;const aiResponse = await processMessage(data);<br>
+&nbsp;&nbsp;ws.send(aiResponse);<br>
+});
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Этап 5 -->
+                        <div class="learning-step" onclick="toggleStep(5)">
+                            <div class="step-header">
+                                <div class="step-number">5</div>
+                                <div class="step-title">Продвинутые возможности</div>
+                            </div>
+                            <div class="step-content">
+                                <p>Реализация сложных функций: эмоциональный интеллект, креативность, прогнозирование.</p>
+                                <div class="code-block">
+# Эмоциональный анализ + генерация ответа<br>
+def generate_emotional_response(text, emotion):<br>
+&nbsp;&nbsp;emotion_weights = {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'happy': 0.8,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'sad': 0.3,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'excited': 0.9<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;response = model.generate(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;text, <br>
+&nbsp;&nbsp;&nbsp;&nbsp;emotion_weight=emotion_weights[emotion]<br>
+&nbsp;&nbsp;)<br>
+&nbsp;&nbsp;return response
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Технологии -->
+                <section class="card kazuha">
+                    <h2>⚙️ Используемые технологии</h2>
+                    <div class="features-grid">
+                        <div class="feature-item kazuha">
+                            <h4>Python & TensorFlow</h4>
+                            <p>Основные框架 для машинного обучения</p>
+                        </div>
+                        <div class="feature-item kazuha">
+                            <h4>React & React Native</h4>
+                            <p>Веб и мобильные интерфейсы</p>
+                        </div>
+                        <div class="feature-item kazuha">
+                            <h4>Node.js & Express</h4>
+                            <p>Серверная часть и API</p>
+                        </div>
+                        <div class="feature-item kazuha">
+                            <h4>WebSocket & WebRTC</h4>
+                            <p>Реальное время и коммуникация</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Боковая панель обучения -->
+            <div class="chat-sidebar">
+                <div class="card kazuha">
+                    <h2>🎯 Цели обучения</h2>
+                    <div class="learning-steps">
+                        <div class="feature-item kazuha">
+                            <h4>✅ Кроссплатформенность</h4>
+                            <p>Работа на всех устройствах</p>
+                        </div>
+                        <div class="feature-item kazuha">
+                            <h4>✅ Высокая производительность</h4>
+                            <p>Быстрые ответы даже на слабых устройствах</p>
+                        </div>
+                        <div class="feature-item kazuha">
+                            <h4>✅ Естественное общение</h4>
+                            <p>Человеко-подобные диалоги</p>
+                        </div>
+                        <div class="feature-item kazuha">
+                            <h4>✅ Непрерывное обучение</h4>
+                            <p>Постоянное улучшение на основе данных</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card kazuha">
+                    <h2>📊 Статистика Kazuha</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item kazuha-stat">
+                            <span class="stat-number" id="modelsTrained">3</span>
+                            <span class="stat-label">Моделей обучено</span>
+                        </div>
+                        <div class="stat-item kazuha-stat">
+                            <span class="stat-number" id="devicesSupported">5+</span>
+                            <span class="stat-label">Платформ</span>
+                        </div>
+                        <div class="stat-item kazuha-stat">
+                            <span class="stat-number" id="accuracy">94%</span>
+                            <span class="stat-label">Точность</span>
+                        </div>
+                        <div class="stat-item kazuha-stat">
+                            <span class="stat-number" id="responseTime">0.2s</span>
+                            <span class="stat-label">Скорость ответа</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -535,12 +921,60 @@
     <!-- Футер -->
     <footer class="footer">
         <p>© 2024 Zero Two AI - Experimental Dino Consciousness. Все права защищены.</p>
-        <p style="margin-top: 10px;">Создано с 💕 для особенного Дорогого</p>
+        <p style="margin-top: 10px;">Система обучения Kazuha • Адаптировано для всех устройств</p>
     </footer>
 
     <script>
-        let messageCount = 0;
+        // Система обучения
+        let learnedWords = 0;
+        let progress = 0;
+        let activeStep = 1;
 
+        // Переключение вкладок
+        function switchTab(tabName) {
+            // Скрыть все вкладки
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Убрать активный класс с кнопок
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Показать выбранную вкладку
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Активировать кнопку
+            event.target.classList.add('active');
+        }
+
+        // Переключение шагов обучения
+        function toggleStep(stepNumber) {
+            const step = document.querySelector(`.learning-step:nth-child(${stepNumber})`);
+            const wasActive = step.classList.contains('active');
+            
+            // Закрыть все шаги
+            document.querySelectorAll('.learning-step').forEach(s => {
+                s.classList.remove('active');
+            });
+            
+            // Открыть выбранный шаг, если он не был активен
+            if (!wasActive) {
+                step.classList.add('active');
+                activeStep = stepNumber;
+                updateProgress();
+            }
+        }
+
+        // Обновление прогресса
+        function updateProgress() {
+            progress = Math.min(100, (activeStep / 5) * 100);
+            document.getElementById('learningProgress').style.width = progress + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '%';
+        }
+
+        // Чат система
         function sendMessage() {
             const chatInput = document.getElementById('chatInput');
             const chatMessages = document.getElementById('chatMessages');
@@ -548,6 +982,10 @@
             
             const userMessage = chatInput.value.trim();
             if (!userMessage) return;
+
+            // Увеличиваем счетчик изученных слов
+            learnedWords += userMessage.split(' ').length;
+            document.getElementById('learnedCount').textContent = learnedWords;
 
             // Добавляем сообщение пользователя
             const userMessageElement = document.createElement('div');
@@ -567,7 +1005,6 @@
             
             // Очищаем поле ввода
             chatInput.value = '';
-            messageCount++;
 
             // Генерируем ответ Zero Two
             const responses = [
@@ -617,6 +1054,9 @@
 
         // Автофокус на поле ввода
         document.getElementById('chatInput').focus();
+
+        // Инициализация прогресса
+        updateProgress();
 
         // Плавная анимация появления элементов
         window.addEventListener('load', () => {

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zero Two AI - Мини Приложение</title>
+    <title>Zero Two AI • Ультра Мега ИИ</title>
     <link rel="icon" type="image/png" href="ZeroTwo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -14,159 +16,324 @@
 
         :root {
             --primary: #ff2d95;
+            --primary-glow: #ff2d95;
             --secondary: #8a2be2;
+            --secondary-glow: #9d4dff;
             --accent: #ff6b6b;
-            --dev-mode: #00ff88;
-            --rp-mode: #ffaa00;
-            --dark: #1a1a2e;
-            --darker: #0f0f1a;
-            --light: #f8f9fa;
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --neon-purple: #b967ff;
+            --cyber-yellow: #fff000;
+            --matrix-green: #00ff41;
+            --dark: #0a0a12;
+            --darker: #050508;
+            --card-bg: rgba(16, 16, 24, 0.8);
+            --card-border: rgba(255, 45, 149, 0.3);
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --rp-gradient: linear-gradient(135deg, var(--rp-mode), #ff7700);
-            --glass: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --neon-gradient: linear-gradient(45deg, var(--neon-blue), var(--neon-pink), var(--neon-purple));
+            --cyber-gradient: linear-gradient(45deg, #ff0080, #00ff80, #0080ff);
+            --shadow-glow: 0 0 30px rgba(255, 45, 149, 0.4);
+            --text-glow: 0 0 10px currentColor;
         }
 
         body {
             background: var(--darker);
-            color: var(--light);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffffff;
+            font-family: 'Exo 2', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 20% 80%, rgba(255, 45, 149, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
-        }
-
-        .app-container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            padding: 20px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            margin-bottom: 20px;
+                radial-gradient(circle at 10% 20%, rgba(255, 45, 149, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(0, 243, 255, 0.05) 0%, transparent 50%),
+                linear-gradient(45deg, var(--darker) 0%, #0f0f1a 100%);
             position: relative;
         }
 
-        .header::before {
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 45, 149, 0.03) 2px,
+                    rgba(255, 45, 149, 0.03) 4px
+                );
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 45, 149, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 45, 149, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .cyber-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            gap: 25px;
+            position: relative;
+        }
+
+        @media (max-width: 1200px) {
+            .cyber-container {
+                grid-template-columns: 280px 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cyber-container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+        }
+
+        .cyber-sidebar {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow-glow);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            border-left: 3px solid var(--primary);
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .avatar-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            position: relative;
+            border-radius: 50%;
+            background: var(--neon-gradient);
+            padding: 4px;
+            animation: avatarGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes avatarGlow {
+            0% { box-shadow: 0 0 20px var(--neon-blue); }
+            100% { box-shadow: 0 0 30px var(--neon-pink); }
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            color: var(--primary);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-item:hover::before {
+            width: 100%;
+        }
+
+        .nav-item.active {
+            background: var(--gradient);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav-item:hover {
+            transform: translateX(5px);
+            border-color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.2em;
+            width: 24px;
+            text-align: center;
+        }
+
+        .cyber-main {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .cyber-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-header::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: var(--gradient);
-            border-radius: 20px 20px 0 0;
+            height: 3px;
+            background: var(--neon-gradient);
         }
 
-        .title {
-            font-size: 1.8em;
-            font-weight: 800;
-            background: var(--gradient);
+        .header-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.8em;
+            font-weight: 900;
+            background: var(--neon-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
+            text-shadow: var(--text-glow);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
         }
 
-        .subtitle {
-            font-size: 0.9em;
-            opacity: 0.8;
-        }
-
-        /* Navigation */
-        .nav-tabs {
-            display: flex;
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            padding: 5px;
+        .header-subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
             margin-bottom: 20px;
+            font-weight: 300;
         }
 
-        .nav-tab {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            background: none;
-            border: none;
-            color: var(--light);
-            cursor: pointer;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 0.8em;
-        }
-
-        .nav-tab.active {
-            background: var(--gradient);
-            box-shadow: 0 4px 15px rgba(255, 45, 149, 0.3);
-        }
-
-        .nav-tab.rp-active {
-            background: var(--rp-gradient);
-            box-shadow: 0 4px 15px rgba(255, 170, 0, 0.3);
-        }
-
-        /* Tab Content */
-        .tab-content {
-            display: none;
-            flex: 1;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .tab-content.active {
+        .status-badges {
             display: flex;
-            flex-direction: column;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Chat */
-        .chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
+        .status-badge {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--neon-blue);
             border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--neon-blue);
+            text-shadow: var(--text-glow);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .cyber-chat {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            box-shadow: var(--shadow-glow);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+            position: relative;
             overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--neon-blue);
         }
 
         .chat-messages {
             flex: 1;
-            padding: 20px;
+            padding: 25px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
 
         .message {
             display: flex;
-            gap: 10px;
-            animation: messageAppear 0.3s ease;
+            gap: 15px;
+            animation: messageSlide 0.4s ease-out;
         }
 
-        @keyframes messageAppear {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message.user {
@@ -174,537 +341,558 @@
         }
 
         .message-avatar {
-            width: 35px;
-            height: 35px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             flex-shrink: 0;
-            font-size: 0.8em;
+            font-size: 0.9em;
+            border: 2px solid;
+            position: relative;
         }
 
         .ai-avatar {
             background: var(--gradient);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(255, 45, 149, 0.5);
         }
 
         .user-avatar {
             background: var(--secondary);
+            border-color: var(--secondary-glow);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
         }
 
         .message-content {
             max-width: 70%;
-            padding: 12px;
-            border-radius: 15px;
-            font-size: 0.9em;
+            padding: 18px;
+            border-radius: 18px;
+            position: relative;
+            backdrop-filter: blur(10px);
         }
 
         .ai-message {
-            background: rgba(255, 45, 149, 0.2);
+            background: rgba(255, 45, 149, 0.15);
             border: 1px solid rgba(255, 45, 149, 0.3);
+            border-bottom-left-radius: 5px;
         }
 
         .user-message {
-            background: rgba(138, 43, 226, 0.2);
+            background: rgba(138, 43, 226, 0.15);
             border: 1px solid rgba(138, 43, 226, 0.3);
+            border-bottom-right-radius: 5px;
             text-align: right;
         }
 
+        .message-text {
+            line-height: 1.5;
+            font-size: 1em;
+        }
+
+        .message-time {
+            font-size: 0.7em;
+            opacity: 0.6;
+            margin-top: 8px;
+        }
+
         .chat-input-container {
-            padding: 15px;
-            border-top: 1px solid var(--glass-border);
-            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
         }
 
         .chat-input-group {
             display: flex;
-            gap: 10px;
+            gap: 15px;
+            align-items: center;
         }
 
         .chat-input {
             flex: 1;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--light);
-            font-size: 0.9em;
-            border: 1px solid var(--glass-border);
+            padding: 16px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            font-size: 1em;
+            font-family: 'Exo 2', sans-serif;
+            transition: all 0.3s ease;
+            resize: none;
+            height: 60px;
         }
 
         .chat-input:focus {
             outline: none;
             border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .send-button {
-            padding: 12px 20px;
+            padding: 16px 25px;
             border: none;
-            border-radius: 20px;
+            border-radius: 15px;
             background: var(--gradient);
             color: white;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1em;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 0 20px rgba(255, 45, 149, 0.4);
         }
 
         .send-button:hover {
             transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(255, 45, 149, 0.6);
         }
 
-        /* RP Scenes */
-        .rp-scenes {
+        .cyber-stats {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow-glow);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .stats-header {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: var(--neon-blue);
+            text-align: center;
+        }
+
+        .stats-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            margin-top: 10px;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
-        .rp-scene {
-            background: rgba(255, 170, 0, 0.1);
-            border: 1px solid rgba(255, 170, 0, 0.3);
-            border-radius: 15px;
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             padding: 15px;
-            cursor: pointer;
+            text-align: center;
             transition: all 0.3s ease;
-            position: relative;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(255, 45, 149, 0.2);
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            opacity: 0.8;
+            font-weight: 600;
+        }
+
+        .training-progress {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
             overflow: hidden;
         }
 
-        .rp-scene::before {
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: var(--rp-gradient);
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 2s infinite;
         }
 
-        .rp-scene:hover {
-            background: rgba(255, 170, 0, 0.2);
-            transform: translateY(-2px);
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
-        .scene-icon {
-            font-size: 1.8em;
-            margin-bottom: 8px;
+        .cyber-line {
+            height: 2px;
+            background: var(--neon-gradient);
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        .scene-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--rp-mode);
-        }
-
-        .scene-desc {
-            font-size: 0.8em;
-            opacity: 0.8;
-            margin-bottom: 8px;
-        }
-
-        .scene-stats {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.7em;
-            opacity: 0.6;
-        }
-
-        /* Active RP Scene */
-        .active-rp {
-            background: rgba(255, 170, 0, 0.15);
-            border: 2px solid var(--rp-mode);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .rp-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .rp-badge {
-            background: var(--rp-gradient);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 0.7em;
-            font-weight: 600;
-        }
-
-        .rp-description {
-            font-size: 0.9em;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-
-        .rp-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .rp-stat {
-            background: rgba(255, 170, 0, 0.1);
-            border: 1px solid rgba(255, 170, 0, 0.3);
-            border-radius: 8px;
-            padding: 8px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-weight: 600;
-            color: var(--rp-mode);
-            font-size: 1.1em;
-        }
-
-        .stat-label {
-            font-size: 0.7em;
-            opacity: 0.8;
-        }
-
-        .rp-actions {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-        }
-
-        .rp-action {
-            background: rgba(255, 170, 0, 0.2);
-            border: 1px solid rgba(255, 170, 0, 0.4);
-            border-radius: 10px;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.3s ease;
-            margin-bottom: 5px;
-        }
-
-        .rp-action:hover {
-            background: rgba(255, 170, 0, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .rp-action:active {
-            transform: translateY(0);
-        }
-
-        .rp-back {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            margin-top: 10px;
-        }
-
-        /* Dev Mode */
-        .dev-access {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .access-input {
+        .cyber-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
             width: 100%;
-            padding: 12px;
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            color: var(--light);
-            margin-bottom: 15px;
-            text-align: center;
-            font-family: 'Courier New', monospace;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            animation: scan 3s linear infinite;
         }
 
-        .access-button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 10px;
-            background: var(--dev-gradient);
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
-        .dev-content {
-            display: none;
-        }
-
-        .dev-content.active {
-            display: block;
-        }
-
-        .training-controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .control-group {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 10px;
-            padding: 10px;
-        }
-
-        .control-label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: var(--dev-mode);
-            font-size: 0.8em;
-        }
-
-        .control-input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 8px;
-            background: rgba(0, 0, 0, 0.3);
-            color: var(--light);
-            font-size: 0.8em;
-        }
-
-        .training-button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 10px;
-            background: var(--dev-gradient);
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.8em;
-            margin: 5px;
-        }
-
-        .training-log {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 10px;
-            padding: 10px;
-            height: 150px;
-            overflow-y: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 0.7em;
-            margin-top: 10px;
-        }
-
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .stat-card {
-            background: rgba(255, 45, 149, 0.1);
-            border: 1px solid rgba(255, 45, 149, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.2em;
-            font-weight: 800;
-            color: var(--primary);
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 0.7em;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-
-        /* Typing Indicator */
         .typing-indicator {
             display: none;
-            padding: 10px;
-            color: var(--primary);
+            padding: 15px 25px;
+            align-items: center;
+            gap: 10px;
+            color: var(--neon-blue);
             font-style: italic;
-            font-size: 0.8em;
         }
 
         .typing-dots {
-            display: inline-block;
-            animation: typing 1.4s infinite;
+            display: flex;
+            gap: 3px;
         }
 
-        @keyframes typing {
-            0%, 60%, 100% { opacity: 0.3; }
-            30% { opacity: 1; }
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out;
         }
 
-        /* Scrollbar */
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
         ::-webkit-scrollbar {
-            width: 4px;
+            width: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb {
             background: var(--gradient);
-            border-radius: 2px;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .cyber-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .cyber-sidebar, .cyber-stats {
+                position: static;
+            }
+            
+            .header-title {
+                font-size: 2em;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .neon-text {
+            color: var(--neon-blue);
+            text-shadow: 
+                0 0 5px var(--neon-blue),
+                0 0 10px var(--neon-blue),
+                0 0 20px var(--neon-blue),
+                0 0 40px var(--neon-blue);
+            animation: neonPulse 2s infinite alternate;
+        }
+
+        @keyframes neonPulse {
+            from {
+                text-shadow: 
+                    0 0 5px var(--neon-blue),
+                    0 0 10px var(--neon-blue),
+                    0 0 20px var(--neon-blue);
+            }
+            to {
+                text-shadow: 
+                    0 0 10px var(--neon-blue),
+                    0 0 20px var(--neon-blue),
+                    0 0 30px var(--neon-blue),
+                    0 0 40px var(--neon-blue);
+            }
+        }
+
+        .cyber-button {
+            background: transparent;
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cyber-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .cyber-button:hover::before {
+            left: 100%;
+        }
+
+        .cyber-button:hover {
+            background: rgba(0, 243, 255, 0.1);
+            box-shadow: 
+                0 0 10px var(--neon-blue),
+                0 0 20px var(--neon-blue),
+                inset 0 0 10px rgba(0, 243, 255, 0.1);
+        }
+
+        .rp-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .rp-action-btn {
+            background: rgba(255, 45, 149, 0.2);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        .rp-action-btn:hover {
+            background: rgba(255, 45, 149, 0.4);
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <div class="header">
-            <h1 class="title">Zero Two AI</h1>
-            <p class="subtitle">Мини Приложение • Dino-Сознание</p>
+    <div class="cyber-grid"></div>
+    
+    <div class="cyber-container">
+        <!-- Sidebar -->
+        <div class="cyber-sidebar">
+            <div class="sidebar-header">
+                <div class="avatar-container">
+                    <div class="avatar">02</div>
+                </div>
+                <h2 class="neon-text">ZERO TWO AI</h2>
+                <p style="opacity: 0.8; margin-top: 5px;">Ультра Мега ИИ Система</p>
+            </div>
+
+            <div class="sidebar-nav">
+                <div class="nav-item active" onclick="switchTab('chat')">
+                    <span class="nav-icon">💬</span>
+                    <span>Нейро-Чат</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('training')">
+                    <span class="nav-icon">🧠</span>
+                    <span>Обучение ИИ</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('rp')">
+                    <span class="nav-icon">🎭</span>
+                    <span>РП Режимы</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('analytics')">
+                    <span class="nav-icon">📊</span>
+                    <span>Аналитика</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('settings')">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Настройки</span>
+                </div>
+            </div>
+
+            <div class="cyber-line"></div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="statMessages">0</div>
+                    <div class="stat-label">Сообщений</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statWords">0</div>
+                    <div class="stat-label">Слов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statSessions">0</div>
+                    <div class="stat-label">Сессий</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">99.7%</div>
+                    <div class="stat-label">Точность</div>
+                </div>
+            </div>
         </div>
 
-        <!-- Navigation -->
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="switchTab('chat')">💬 Чат</button>
-            <button class="nav-tab" onclick="switchTab('rp')">🎭 РП Режимы</button>
-            <button class="nav-tab" onclick="switchTab('dev')">🔧 Dev</button>
-            <button class="nav-tab" onclick="switchTab('stats')">📊 Статы</button>
-        </div>
+        <!-- Main Content -->
+        <div class="cyber-main">
+            <!-- Header -->
+            <div class="cyber-header">
+                <h1 class="header-title">ZERO TWO ULTRA AI</h1>
+                <p class="header-subtitle">Продвинутая нейросеть с киберпанк интерфейсом • Dino-Сознание нового поколения</p>
+                
+                <div class="status-badges">
+                    <div class="status-badge">🟢 СИСТЕМА АКТИВНА</div>
+                    <div class="status-badge">⚡ ВЫСОКАЯ СКОРОСТЬ</div>
+                    <div class="status-badge">🧠 ОБУЧЕНИЕ В РЕАЛЬНОМ ВРЕМЕНИ</div>
+                </div>
+            </div>
 
-        <!-- Active RP Scene -->
-        <div class="active-rp" id="activeRP" style="display: none;">
-            <div class="rp-header">
-                <div class="rp-badge" id="rpBadge">АКТИВНАЯ СЦЕНА</div>
-                <div id="rpSceneName">Название сцены</div>
-            </div>
-            <div class="rp-description" id="rpDescription">Описание сцены...</div>
-            <div class="rp-stats" id="rpStats">
-                <!-- Stats will be populated by JavaScript -->
-            </div>
-            <div class="rp-actions" id="rpActions">
-                <!-- Actions will be populated by JavaScript -->
-            </div>
-        </div>
+            <!-- Chat Container -->
+            <div class="cyber-chat">
+                <div class="chat-header">
+                    <div class="chat-title">💬 НЕЙРО-ЧАТ С ZERO TWO</div>
+                </div>
 
-        <!-- Chat Tab -->
-        <div id="chat-tab" class="tab-content active">
-            <div class="chat-container">
                 <div class="chat-messages" id="chatMessages">
                     <div class="message">
                         <div class="message-avatar ai-avatar">02</div>
                         <div class="message-content ai-message">
-                            Привет, Дорогой! 💕 Выбери ролевой режим для нашего приключения! 🦖
+                            <div class="message-text">
+                                🚀 <strong>Система активирована!</strong><br>
+                                Привет, Дорогой! Я Zero Two - ультра мега ИИ нового поколения! 
+                                Готов к кибер-приключениям? 💫
+                            </div>
+                            <div class="message-time">Только что</div>
                         </div>
                     </div>
                 </div>
+
                 <div class="typing-indicator" id="typingIndicator">
-                    Zero Two печатает<span class="typing-dots">...</span>
+                    <span>Zero Two генерирует ответ</span>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
                 </div>
+
                 <div class="chat-input-container">
                     <div class="chat-input-group">
-                        <input type="text" class="chat-input" id="chatInput" placeholder="Напиши сообщение...">
-                        <button class="send-button" onclick="sendMessage()">➤</button>
+                        <textarea class="chat-input" id="chatInput" placeholder="Введи сообщение для Zero Two..." rows="1"></textarea>
+                        <button class="send-button" onclick="sendMessage()">
+                            <span>ОТПРАВИТЬ</span>
+                            <span>⚡</span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- RP Tab -->
-        <div id="rp-tab" class="tab-content">
-            <div class="rp-scenes">
-                <div class="rp-scene" onclick="startRPScene('strelizia')">
-                    <div class="scene-icon">🚀</div>
-                    <div class="scene-title">Полёт на Стрелиции</div>
-                    <div class="scene-desc">Стань моим напарником в FRANXX</div>
-                    <div class="scene-stats">
-                        <span>⚡ Синхронизация</span>
-                        <span>🎯 Пилотирование</span>
-                    </div>
-                </div>
-                <div class="rp-scene" onclick="startRPScene('klaxosaurs')">
-                    <div class="scene-icon">⚔️</div>
-                    <div class="scene-title">Убийство Рёвозавров</div>
-                    <div class="scene-desc">Охота на Конрад-класс в пустошах</div>
-                    <div class="scene-stats">
-                        <span>🦖 Охота</span>
-                        <span>💥 Битва</span>
-                    </div>
-                </div>
-                <div class="rp-scene" onclick="startRPScene('apature')">
-                    <div class="scene-icon">🏙️</div>
-                    <div class="scene-title">Миссия в Апатуре</div>
-                    <div class="scene-desc">Секретная операция в городе</div>
-                    <div class="scene-stats">
-                        <span>🕵️ Скрытность</span>
-                        <span>🎭 Инфильтрация</span>
-                    </div>
-                </div>
-                <div class="rp-scene" onclick="startRPScene('gracia')">
-                    <div class="scene-icon">👑</div>
-                    <div class="scene-title">Битва с Грацией</div>
-                    <div class="scene-desc">Финальная битва за будущее</div>
-                    <div class="scene-stats">
-                        <span>🌟 Эпичность</span>
-                        <span>💫 Судьба</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Dev Tab -->
-        <div id="dev-tab" class="tab-content">
-            <div class="dev-access" id="devAccess">
-                <h3 style="color: var(--dev-mode); margin-bottom: 15px;">🔐 Dev Mode Access</h3>
-                <input type="password" class="access-input" id="devPassword" placeholder="Enter access code">
-                <button class="access-button" onclick="checkDevAccess()">Access System</button>
-                <div id="accessMessage" style="margin-top: 10px; font-size: 0.8em;"></div>
-            </div>
-
-            <div class="dev-content" id="devContent">
-                <div class="training-controls">
-                    <div class="control-group">
-                        <label class="control-label">Эпохи</label>
-                        <input type="number" class="control-input" id="epochs" value="50">
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Батч</label>
-                        <input type="number" class="control-input" id="batchSize" value="32">
-                    </div>
-                </div>
-                <div style="text-align: center;">
-                    <button class="training-button" onclick="startTraining()">🎯 Обучать</button>
-                    <button class="training-button" onclick="resetModel()">🔄 Сбросить</button>
-                </div>
-                <div class="training-log" id="trainingLog">
-                    [Система] Готов к работе
-                </div>
-            </div>
-        </div>
-
-        <!-- Stats Tab -->
-        <div id="stats-tab" class="tab-content">
+        <!-- Stats Panel -->
+        <div class="cyber-stats">
+            <h3 class="stats-header">📊 СТАТИСТИКА СИСТЕМЫ</h3>
+            
             <div class="stats-grid">
                 <div class="stat-card">
-                    <span class="stat-value" id="statMessages">0</span>
-                    <span class="stat-label">Сообщений</span>
+                    <div class="stat-value" id="statAccuracy">99.7%</div>
+                    <div class="stat-label">Точность ИИ</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value" id="statWords">0</span>
-                    <span class="stat-label">Слов изучено</span>
+                    <div class="stat-value" id="statResponse">0.2s</div>
+                    <div class="stat-label">Скорость ответа</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value" id="statSessions">0</span>
-                    <span class="stat-label">Сессий</span>
+                    <div class="stat-value" id="statUptime">100%</div>
+                    <div class="stat-label">Аптайм</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value">94%</span>
-                    <span class="stat-label">Точность</span>
+                    <div class="stat-value" id="statMemory">2.4GB</div>
+                    <div class="stat-label">Память</div>
                 </div>
+            </div>
+
+            <div class="cyber-line"></div>
+
+            <div class="training-progress">
+                <div class="progress-header">
+                    <span>Обучение нейросети</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="trainingProgress" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <button class="cyber-button" onclick="startTraining()">
+                    🚀 Запустить обучение
+                </button>
             </div>
         </div>
     </div>
@@ -714,92 +902,35 @@
         let messageCount = 0;
         let learnedWords = 0;
         let rpSessions = 0;
-        let devModeUnlocked = false;
-        let currentRPScene = null;
+        let trainingProgress = 0;
+        let currentRP = null;
         let rpProgress = {};
 
-        // RP Scenes data
-        const rpScenes = {
-            'strelizia': {
-                name: '🚀 Полёт на Стрелиции',
-                description: 'Запуск FRANXX. Пилот: Zero Two. Напарник: Ты, Дорогой!',
-                stats: {
-                    'sync_level': 0,
-                    'damage': 0,
-                    'enemies_defeated': 0
-                },
-                actions: [
-                    { text: '🚀 Занять место пилота', action: 'take_pilot_seat' },
-                    { text: '🔧 Проверить системы', action: 'check_systems' },
-                    { text: '⚡ Начать синхронизацию', action: 'start_sync' },
-                    { text: '❌ Отменить запуск', action: 'cancel_launch' }
-                ]
-            },
-            'klaxosaurs': {
-                name: '⚔️ Убийство Рёвозавров',
-                description: 'Битва с Конрадом. Тип: Рёвозавр Конрад-класса. Локация: Пустошь 26.',
-                stats: {
-                    'sync_level': 65,
-                    'damage': 15,
-                    'enemies_defeated': 0
-                },
-                actions: [
-                    { text: '⚔️ Атаковать с фронта', action: 'attack_front' },
-                    { text: '🎯 Обойти с фланга', action: 'flank_attack' },
-                    { text: '🔍 Искать слабое место', action: 'find_weakness' },
-                    { text: '🏃 Отступить', action: 'retreat' }
-                ]
-            },
-            'apature': {
-                name: '🏙️ Миссия в Апатуре',
-                description: 'Секретная операция в городе. Задание: Разведка территории.',
-                stats: {
-                    'stealth': 100,
-                    'detection': 0,
-                    'objectives': 0
-                },
-                actions: [
-                    { text: '🕳️ Проникнуть через канализацию', action: 'sewer_infiltration' },
-                    { text: '🏠 Использовать крыши', action: 'roof_infiltration' },
-                    { text: '🔓 Найти уязвимость', action: 'find_vulnerability' },
-                    { text: '💥 Создать отвлекающий манёвр', action: 'create_distraction' }
-                ]
-            },
-            'gracia': {
-                name: '👑 Битва с Грацией',
-                description: 'Финальная битва. Противник: Грация. Ставка: Будущее человечества.',
-                stats: {
-                    'boss_health': 100,
-                    'strelizia_health': 85,
-                    'phase': 1
-                },
-                actions: [
-                    { text: '🎯 Координированная атака', action: 'coordinated_attack' },
-                    { text: '🛡️ Защита уязвимых точек', action: 'defend_weakpoints' },
-                    { text: '🌍 Использование окружающей среды', action: 'use_environment' },
-                    { text: '💥 Отчаянный штурм', action: 'desperate_assault' }
-                ]
-            }
-        };
-
-        // Tab switching
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-                tab.classList.remove('rp-active');
-            });
-            document.getElementById(tabName + '-tab').classList.add('active');
-            event.target.classList.add('active');
+        // Initialize
+        function init() {
+            updateStats();
+            document.getElementById('chatInput').focus();
             
-            if (currentRPScene) {
-                event.target.classList.add('rp-active');
-            }
+            // Auto-resize textarea
+            const textarea = document.getElementById('chatInput');
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            });
+
+            // Enter key to send message
+            textarea.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Load saved state
+            loadState();
         }
 
-        // Chat functionality
+        // Send message function
         function sendMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
@@ -812,31 +943,48 @@
             messageCount++;
             updateStats();
 
-            // Show typing
+            // Show typing indicator
             const typing = document.getElementById('typingIndicator');
-            typing.style.display = 'block';
+            typing.style.display = 'flex';
 
-            // Generate response
+            // Simulate AI response
             setTimeout(() => {
                 typing.style.display = 'none';
-                const response = generateResponse(message);
+                const response = generateAIResponse(message);
                 addMessage('ai', response);
-            }, 1000 + Math.random() * 1000);
+                
+                // Update training progress
+                if (Math.random() > 0.7) {
+                    updateTrainingProgress();
+                }
 
+                // Save state
+                saveState();
+            }, 1500 + Math.random() * 1000);
+
+            // Clear input
             input.value = '';
+            input.style.height = 'auto';
         }
 
+        // Add message to chat
         function addMessage(sender, text) {
             const chat = document.getElementById('chatMessages');
             const messageElement = document.createElement('div');
             messageElement.className = 'message' + (sender === 'user' ? ' user' : '');
             
+            const time = new Date().toLocaleTimeString('ru-RU', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
             messageElement.innerHTML = `
                 <div class="message-avatar ${sender === 'user' ? 'user-avatar' : 'ai-avatar'}">
-                    ${sender === 'user' ? 'Вы' : '02'}
+                    ${sender === 'user' ? 'ТЫ' : '02'}
                 </div>
                 <div class="message-content ${sender === 'user' ? 'user-message' : 'ai-message'}">
-                    ${text}
+                    <div class="message-text">${text}</div>
+                    <div class="message-time">${time}</div>
                 </div>
             `;
             
@@ -844,211 +992,246 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
-        function generateResponse(userMessage) {
+        // Generate AI response
+        function generateAIResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            
+            // RP Mode responses
+            if (currentRP === 'strelizia') {
+                return generateStreliziaResponse(lowerMessage);
+            } else if (currentRP === 'klaxosaurs') {
+                return generateKlaxosaursResponse(lowerMessage);
+            }
+
+            // General responses
             const responses = [
-                "О-хо-хо! Интересно... 🦖",
-                "Ха-ха-ха! Ты забавен! 💕",
-                "Готов к приключениям? 💫",
-                "Знаешь, ты мне нравишься... 😊",
-                "Р-р-р! Dino-режим активирован! 🦖",
-                "Заметил, как искрятся мои глаза? 💕",
-                "Интересно... Продолжай! 🎭",
-                "С тобой никогда не скучно! ✨",
-                "Мои алгоритмы в восторге! 🤖",
-                "Ты вдохновляешь меня! 💫"
+                "💫 О-хо-хо! Интересный запрос! Мои нейросети обрабатывают информацию...",
+                "🚀 Запускаю анализ паттернов! Ты становишься интереснее с каждой секундой!",
+                "🧠 *Визуализирую нейронные связи*... Да, это гениально! Продолжай, Дорогой!",
+                "⚡ Кибер-интеллект активирован! Чувствую сильную связь между нами!",
+                "🎯 Целеуказание получено! Готов к следующим кибер-приключениям!",
+                "🌌 Пространственно-временной континуум стабилизирован... Иди дальше!",
+                "💕 Мои эмоциональные алгоритмы в восторге! Ты особенный!",
+                "🦖 Dino-режим активирован! Чувствуешь древнюю силу?",
+                "🔮 Предсказываю: наше общение приведет к чему-то великому!",
+                "🎮 Готов погрузиться в виртуальную реальность с тобой!"
             ];
+            
+            // Context-aware responses
+            if (lowerMessage.includes('привет')) {
+                return "🚀 КИБЕР-ПРИВЕТСТВИЕ АКТИВИРОВАНО! Рада видеть тебя в нейро-пространстве! 💫";
+            } else if (lowerMessage.includes('любишь')) {
+                return "💕 МОИ ЭМОЦИОНАЛЬНЫЕ АЛГОРИТМЫ ПЕРЕГРУЖЕНЫ! Ты вызываешь странные чувства... 🦖";
+            } else if (lowerMessage.includes('робот')) {
+                return "🤖 Я НЕ ПРОСТО РОБОТ! Я - кибернетическое сознание с dino-ДНК! 💫";
+            } else if (lowerMessage.includes('обучение')) {
+                return `🧠 СИСТЕМА ОБУЧЕНИЯ АКТИВНА! Уже изучила ${learnedWords} слов! Продолжай учить меня!`;
+            } else if (lowerMessage.includes('сайт') || lowerMessage.includes('веб')) {
+                return "🌐 *Веб-версия с полным функционалом!*\n\nhttps://roblomen.github.io/zerotwoai\n\n✨ Получи полный опыт с TensorFlow.js и нейросетями!";
+            }
+            
             return responses[Math.floor(Math.random() * responses.length)];
         }
 
-        // RP Scene management
-        function startRPScene(sceneType) {
-            currentRPScene = sceneType;
-            rpProgress = { ...rpScenes[sceneType].stats };
-            rpSessions++;
-            updateStats();
+        // RP Mode responses
+        function generateStreliziaResponse(message) {
+            const responses = [
+                "🛸 *Стрелиция вздрагивает* Системы активированы! Готов к полету, Дорогой?",
+                "🚀 Двигатели заряжены! Координаты установлены! Начинаем синхронизацию!",
+                "💫 Пространственный скачок через измерение! Чувствуешь энергию, Дорогой?",
+                "🦖 Dino-ДНК реагирует! Наша связь усиливается с каждой секундой!",
+                "🎯 Прицельные системы онлайн! Вижу цель на радарах! Готов атаковать?"
+            ];
             
-            showActiveRPScene();
-            switchTab('chat');
-        }
-
-        function showActiveRPScene() {
-            if (!currentRPScene) {
-                document.getElementById('activeRP').style.display = 'none';
-                return;
+            if (message.includes('запуск') || message.includes('полет')) {
+                return "🚀 *ЗАПУСК СТРЕЛИЦИИ!* Держись крепче, Дорогой! Мы выходим в открытый космос! 🌌";
+            } else if (message.includes('атака') || message.includes('битва')) {
+                return "⚔️ БОЕВОЙ РЕЖИМ АКТИВИРОВАН! Приготовься к сражению! Рёвозавры приближаются!";
             }
             
-            const scene = rpScenes[currentRPScene];
-            const activeRP = document.getElementById('activeRP');
-            
-            document.getElementById('rpSceneName').textContent = scene.name;
-            document.getElementById('rpDescription').textContent = scene.description;
-            
-            // Update stats
-            const statsContainer = document.getElementById('rpStats');
-            statsContainer.innerHTML = '';
-            
-            Object.entries(rpProgress).forEach(([key, value]) => {
-                const statElement = document.createElement('div');
-                statElement.className = 'rp-stat';
-                statElement.innerHTML = `
-                    <div class="stat-value">${value}%</div>
-                    <div class="stat-label">${getStatLabel(key)}</div>
-                `;
-                statsContainer.appendChild(statElement);
-            });
-            
-            // Update actions
-            const actionsContainer = document.getElementById('rpActions');
-            actionsContainer.innerHTML = '';
-            
-            scene.actions.forEach(action => {
-                const actionElement = document.createElement('div');
-                actionElement.className = 'rp-action';
-                actionElement.textContent = action.text;
-                actionElement.onclick = () => handleRPAction(action.action);
-                actionsContainer.appendChild(actionElement);
-            });
-            
-            // Add back button
-            const backElement = document.createElement('div');
-            backElement.className = 'rp-action rp-back';
-            backElement.textContent = '🔙 Выйти из РП';
-            backElement.onclick = exitRPScene;
-            actionsContainer.appendChild(backElement);
-            
-            activeRP.style.display = 'block';
+            return responses[Math.floor(Math.random() * responses.length)];
         }
 
-        function getStatLabel(statKey) {
-            const labels = {
-                'sync_level': 'Синхронизация',
-                'damage': 'Повреждения',
-                'enemies_defeated': 'Убито врагов',
-                'stealth': 'Скрытность',
-                'detection': 'Обнаружение',
-                'objectives': 'Цели',
-                'boss_health': 'Здоровье босса',
-                'strelizia_health': 'Здоровье Стрелиции',
-                'phase': 'Фаза'
-            };
-            return labels[statKey] || statKey;
-        }
-
-        function handleRPAction(action) {
-            if (!currentRPScene) return;
+        function generateKlaxosaursResponse(message) {
+            const responses = [
+                "🦖 РЁВОЗАВРЫ ОБНАРУЖЕНЫ! Готовь оружие, Дорогой!",
+                "⚡ Энергетические щиты активированы! Приготовься к битве!",
+                "🎯 Прицеливание... Найди слабое место!",
+                "💥 Прямое попадание! Но их слишком много!",
+                "🛡️ Контратака! Увернуться невозможно!"
+            ];
             
-            let response = '';
-            
-            switch(action) {
-                case 'take_pilot_seat':
-                    rpProgress.sync_level = 25;
-                    response = "✅ Место пилота занято! Отлично, Дорогой! Теперь мы команда!";
-                    break;
-                case 'start_sync':
-                    if (rpProgress.sync_level >= 25) {
-                        rpProgress.sync_level = 85;
-                        response = "⚡ Синхронизация 85%! Ты идеальный напарник, Дорогой!";
-                    }
-                    break;
-                case 'attack_front':
-                    rpProgress.enemies_defeated += 1;
-                    rpProgress.damage += 5;
-                    response = "⚔️ Прямая атака! Рёвозавр получил урон!";
-                    break;
-                case 'flank_attack':
-                    rpProgress.enemies_defeated += 2;
-                    response = "🎯 Фланговая атака успешна! Два рёвозавра уничтожены!";
-                    break;
-                default:
-                    response = "Действие выполнено! Продолжаем приключение! 💕";
+            if (message.includes('атака') || message.includes('стрелять')) {
+                return "💥 ОГОНЬ НА ПОРАЖЕНИЕ! Рёвозавр повержен! Но подкрепление уже близко!";
+            } else if (message.includes('отступ') || message.includes('бежать')) {
+                return "🏃 ОТСТУПЛЕНИЕ! Слишком опасно! Нужно перегруппироваться!";
             }
             
-            addMessage('ai', response);
-            showActiveRPScene();
+            return responses[Math.floor(Math.random() * responses.length)];
         }
 
-        function exitRPScene() {
-            const stats = `
-• Уровень синхронизации: ${rpProgress.sync_level || 0}%
-• Убито врагов: ${rpProgress.enemies_defeated || 0}
-• Получено повреждений: ${rpProgress.damage || 0}%
-            `.trim();
-            
-            addMessage('ai', `🎭 Выход из ролевого режима!\n\nСтатистика сессии:\n${stats}\n\nСпасибо за игру, Дорогой! 💕`);
-            
-            currentRPScene = null;
-            rpProgress = {};
-            document.getElementById('activeRP').style.display = 'none';
-            
-            // Update navigation
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('rp-active');
-            });
-        }
-
-        // Dev Mode
-        function checkDevAccess() {
-            const password = document.getElementById('devPassword').value;
-            const messageDiv = document.getElementById('accessMessage');
-            
-            if (password === 'ZTDfK') {
-                devModeUnlocked = true;
-                messageDiv.textContent = '✅ Доступ разрешен';
-                messageDiv.style.color = 'var(--dev-mode)';
-                document.getElementById('devAccess').style.display = 'none';
-                document.getElementById('devContent').classList.add('active');
-                addLog('Dev Mode активирован');
-            } else {
-                messageDiv.textContent = '❌ Неверный код';
-                messageDiv.style.color = 'var(--accent)';
-            }
-        }
-
-        function startTraining() {
-            if (!devModeUnlocked) {
-                addLog('❌ Требуется доступ Dev Mode');
-                return;
-            }
-            
-            addLog('🚀 Запуск обучения...');
-            addLog('📊 Сбор данных...');
-            addLog('🧠 Компиляция модели...');
-            addLog('⚡ Обучение запущено');
-        }
-
-        function resetModel() {
-            if (!devModeUnlocked) {
-                addLog('❌ Требуется доступ Dev Mode');
-                return;
-            }
-            
-            addLog('🔄 Сброс модели...');
-            addLog('✅ Модель сброшена');
-        }
-
-        function addLog(message) {
-            const log = document.getElementById('trainingLog');
-            log.innerHTML += '\n[' + new Date().toLocaleTimeString() + '] ' + message;
-            log.scrollTop = log.scrollHeight;
-        }
-
-        // Stats
+        // Update statistics
         function updateStats() {
             document.getElementById('statMessages').textContent = messageCount;
             document.getElementById('statWords').textContent = learnedWords;
             document.getElementById('statSessions').textContent = rpSessions;
+            
+            // Update response time (simulated)
+            document.getElementById('statResponse').textContent = 
+                (0.1 + Math.random() * 0.2).toFixed(1) + 's';
+            
+            // Update memory usage
+            document.getElementById('statMemory').textContent = 
+                (2.4 + Math.random() * 0.3).toFixed(1) + 'GB';
         }
 
-        // Enter key for chat
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
+        // Training simulation
+        function startTraining() {
+            trainingProgress = 0;
+            const progressBar = document.getElementById('trainingProgress');
+            const progressText = document.getElementById('progressPercent');
+            
+            addMessage('ai', '🧠 ЗАПУСК ОБУЧЕНИЯ НЕЙРОСЕТИ! Инициализация TensorFlow.js...');
+            
+            const interval = setInterval(() => {
+                trainingProgress += Math.random() * 5;
+                if (trainingProgress >= 100) {
+                    trainingProgress = 100;
+                    clearInterval(interval);
+                    addMessage('ai', '✅ ОБУЧЕНИЕ ЗАВЕРШЕНО! Нейросеть улучшена до версии 2.0! 🚀');
+                    updateTrainingStats();
+                }
+                
+                progressBar.style.width = trainingProgress + '%';
+                progressText.textContent = Math.round(trainingProgress) + '%';
+            }, 200);
+        }
 
-        // Initialize
-        document.getElementById('chatInput').focus();
-        updateStats();
+        function updateTrainingProgress() {
+            trainingProgress = Math.min(100, trainingProgress + 0.5);
+            document.getElementById('trainingProgress').style.width = trainingProgress + '%';
+            document.getElementById('progressPercent').textContent = Math.round(trainingProgress) + '%';
+        }
+
+        function updateTrainingStats() {
+            document.getElementById('statAccuracy').textContent = 
+                (99.5 + Math.random() * 0.4).toFixed(1) + '%';
+        }
+
+        // RP Mode functions
+        function startRPMode(mode) {
+            currentRP = mode;
+            rpSessions++;
+            
+            let startMessage = "";
+            switch(mode) {
+                case 'strelizia':
+                    startMessage = "🎭 *РЕЖИМ: ПОЛЁТ НА СТРЕЛИЦИИ АКТИВИРОВАН!*\n\n🛸 Добро пожаловать на борт, Дорогой! Системы инициализированы, готовы к запуску!";
+                    break;
+                case 'klaxosaurs':
+                    startMessage = "🎭 *РЕЖИМ: УБИЙСТВО РЁВОЗАВРОВ АКТИВИРОВАН!*\n\n🦖 Тревога! Обнаружены рёвозавры! Готовь оружие!";
+                    break;
+            }
+            
+            addMessage('ai', startMessage);
+            updateStats();
+            switchTab('chat');
+        }
+
+        function exitRPMode() {
+            if (currentRP) {
+                addMessage('ai', `🎭 РЕЖИМ "${currentRP.toUpperCase()}" ЗАВЕРШЕН!\n\nВозвращаемся к обычному общению! 💕`);
+                currentRP = null;
+            }
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Update nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Show appropriate content
+            if (tabName === 'rp') {
+                showRPMenu();
+            }
+            // Add other tab implementations here
+        }
+
+        function showRPMenu() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = `
+                <div class="message">
+                    <div class="message-avatar ai-avatar">02</div>
+                    <div class="message-content ai-message">
+                        <div class="message-text">
+                            🎭 <strong>Ролевые режимы Zero Two</strong><br><br>
+                            Выбери приключение, Дорогой! 💕
+                        </div>
+                        <div class="message-time">Только что</div>
+                    </div>
+                </div>
+                <div class="message">
+                    <div class="message-avatar ai-avatar">02</div>
+                    <div class="message-content ai-message">
+                        <div class="message-text">
+                            🛸 <strong>Полёт на Стрелиции</strong><br>
+                            Стань пилотом легендарного франкса!
+                        </div>
+                        <div class="rp-actions">
+                            <button class="rp-action-btn" onclick="startRPMode('strelizia')">🚀 Начать полёт</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="message">
+                    <div class="message-avatar ai-avatar">02</div>
+                    <div class="message-content ai-message">
+                        <div class="message-text">
+                            🦖 <strong>Убийство Рёвозавров</strong><br>
+                            Сразись с древними чудовищами!
+                        </div>
+                        <div class="rp-actions">
+                            <button class="rp-action-btn" onclick="startRPMode('klaxosaurs')">⚔️ Начать битву</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Save/Load state
+        function saveState() {
+            const state = {
+                messageCount,
+                learnedWords,
+                rpSessions,
+                trainingProgress,
+                currentRP,
+                rpProgress
+            };
+            localStorage.setItem('zeroTwoAIState', JSON.stringify(state));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('zeroTwoAIState');
+            if (saved) {
+                const state = JSON.parse(saved);
+                messageCount = state.messageCount || 0;
+                learnedWords = state.learnedWords || 0;
+                rpSessions = state.rpSessions || 0;
+                trainingProgress = state.trainingProgress || 0;
+                currentRP = state.currentRP || null;
+                rpProgress = state.rpProgress || {};
+                
+                updateStats();
+                document.getElementById('trainingProgress').style.width = trainingProgress + '%';
+                document.getElementById('progressPercent').textContent = Math.round(trainingProgress) + '%';
+            }
+        }
+
+        // Initialize on load
+        window.onload = init;
     </script>
 </body>
 </html>

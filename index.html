@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zero Two AI • Ультра Мега ИИ</title>
+    <title>Zero Two AI • ИИ Система</title>
     <link rel="icon" type="image/png" href="ZeroTwo.png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -138,6 +138,7 @@
             background: var(--neon-gradient);
             padding: 4px;
             animation: avatarGlow 3s ease-in-out infinite alternate;
+            overflow: hidden;
         }
 
         @keyframes avatarGlow {
@@ -153,9 +154,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5em;
-            color: var(--primary);
             border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .sidebar-nav {
@@ -352,12 +358,19 @@
             font-size: 0.9em;
             border: 2px solid;
             position: relative;
+            overflow: hidden;
         }
 
         .ai-avatar {
             background: var(--gradient);
             border-color: var(--primary);
             box-shadow: 0 0 15px rgba(255, 45, 149, 0.5);
+        }
+
+        .ai-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .user-avatar {
@@ -738,6 +751,54 @@
             background: rgba(255, 45, 149, 0.4);
             transform: translateY(-2px);
         }
+
+        .dev-panel {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--matrix-green);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .dev-input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid var(--matrix-green);
+            border-radius: 5px;
+            color: var(--matrix-green);
+            font-family: 'Courier New', monospace;
+            margin-bottom: 10px;
+        }
+
+        .dev-button {
+            background: transparent;
+            border: 1px solid var(--matrix-green);
+            color: var(--matrix-green);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .dev-button:hover {
+            background: rgba(0, 255, 65, 0.2);
+        }
+
+        .dev-features {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .dev-feature {
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid var(--matrix-green);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -748,10 +809,12 @@
         <div class="cyber-sidebar">
             <div class="sidebar-header">
                 <div class="avatar-container">
-                    <div class="avatar">02</div>
+                    <div class="avatar">
+                        <img src="ZeroTwo.png" alt="Zero Two" onerror="this.style.display='none'; this.parentNode.innerHTML='02';">
+                    </div>
                 </div>
                 <h2 class="neon-text">ZERO TWO AI</h2>
-                <p style="opacity: 0.8; margin-top: 5px;">Ультра Мега ИИ Система</p>
+                <p style="opacity: 0.8; margin-top: 5px;">ИИ Система</p>
             </div>
 
             <div class="sidebar-nav">
@@ -771,9 +834,9 @@
                     <span class="nav-icon">📊</span>
                     <span>Аналитика</span>
                 </div>
-                <div class="nav-item" onclick="switchTab('settings')">
-                    <span class="nav-icon">⚙️</span>
-                    <span>Настройки</span>
+                <div class="nav-item" onclick="switchTab('dev')">
+                    <span class="nav-icon">🔧</span>
+                    <span>Dev Mode</span>
                 </div>
             </div>
 
@@ -803,7 +866,7 @@
         <div class="cyber-main">
             <!-- Header -->
             <div class="cyber-header">
-                <h1 class="header-title">ZERO TWO ULTRA AI</h1>
+                <h1 class="header-title">ZERO TWO AI</h1>
                 <p class="header-subtitle">Продвинутая нейросеть с киберпанк интерфейсом • Dino-Сознание нового поколения</p>
                 
                 <div class="status-badges">
@@ -821,11 +884,13 @@
 
                 <div class="chat-messages" id="chatMessages">
                     <div class="message">
-                        <div class="message-avatar ai-avatar">02</div>
+                        <div class="message-avatar ai-avatar">
+                            <img src="ZeroTwo.png" alt="Zero Two" onerror="this.style.display='none'; this.parentNode.innerHTML='02';">
+                        </div>
                         <div class="message-content ai-message">
                             <div class="message-text">
                                 🚀 <strong>Система активирована!</strong><br>
-                                Привет, Дорогой! Я Zero Two - ультра мега ИИ нового поколения! 
+                                Привет, Дорогой! Я Zero Two - ИИ нового поколения! 
                                 Готов к кибер-приключениям? 💫
                             </div>
                             <div class="message-time">Только что</div>
@@ -894,6 +959,29 @@
                     🚀 Запустить обучение
                 </button>
             </div>
+
+            <!-- Dev Panel -->
+            <div class="dev-panel">
+                <h4 style="color: var(--matrix-green); margin-bottom: 10px;">🔧 Dev Mode</h4>
+                <input type="password" class="dev-input" id="devPassword" placeholder="Введите пароль Dev Mode">
+                <button class="dev-button" onclick="activateDevMode()">Активировать</button>
+                <div class="dev-features" id="devFeatures">
+                    <div class="dev-feature">
+                        <strong>🧠 Нейросеть:</strong> 
+                        <button onclick="resetTraining()">Сброс</button>
+                        <button onclick="forceTraining()">Обучение</button>
+                    </div>
+                    <div class="dev-feature">
+                        <strong>📊 Статистика:</strong> 
+                        <button onclick="maxStats()">Макс. статы</button>
+                        <button onclick="resetStats()">Сброс</button>
+                    </div>
+                    <div class="dev-feature">
+                        <strong>🎭 РП режимы:</strong> 
+                        <button onclick="unlockAllRP()">Разблокировать все</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -905,6 +993,7 @@
         let trainingProgress = 0;
         let currentRP = null;
         let rpProgress = {};
+        let devMode = false;
 
         // Initialize
         function init() {
@@ -980,7 +1069,7 @@
             
             messageElement.innerHTML = `
                 <div class="message-avatar ${sender === 'user' ? 'user-avatar' : 'ai-avatar'}">
-                    ${sender === 'user' ? 'ТЫ' : '02'}
+                    ${sender === 'user' ? 'ТЫ' : '<img src="ZeroTwo.png" alt="Zero Two" onerror="this.style.display=\'none\'; this.parentNode.innerHTML=\'02\';">'}
                 </div>
                 <div class="message-content ${sender === 'user' ? 'user-message' : 'ai-message'}">
                     <div class="message-text">${text}</div>
@@ -1001,6 +1090,20 @@
                 return generateStreliziaResponse(lowerMessage);
             } else if (currentRP === 'klaxosaurs') {
                 return generateKlaxosaursResponse(lowerMessage);
+            }
+
+            // Dev Mode commands
+            if (devMode) {
+                if (lowerMessage.includes('/dev reset')) {
+                    resetTraining();
+                    return "🔧 Dev: Обучение сброшено!";
+                } else if (lowerMessage.includes('/dev stats')) {
+                    maxStats();
+                    return "🔧 Dev: Статистика максимизирована!";
+                } else if (lowerMessage.includes('/dev train')) {
+                    forceTraining();
+                    return "🔧 Dev: Принудительное обучение запущено!";
+                }
             }
 
             // General responses
@@ -1028,6 +1131,8 @@
                 return `🧠 СИСТЕМА ОБУЧЕНИЯ АКТИВНА! Уже изучила ${learnedWords} слов! Продолжай учить меня!`;
             } else if (lowerMessage.includes('сайт') || lowerMessage.includes('веб')) {
                 return "🌐 *Веб-версия с полным функционалом!*\n\nhttps://roblomen.github.io/zerotwoai\n\n✨ Получи полный опыт с TensorFlow.js и нейросетями!";
+            } else if (lowerMessage.includes('dev mode') || lowerMessage.includes('devmode')) {
+                return "🔧 Dev Mode доступен в панели справа! Введи пароль для активации!";
             }
             
             return responses[Math.floor(Math.random() * responses.length)];
@@ -1156,6 +1261,8 @@
             // Show appropriate content
             if (tabName === 'rp') {
                 showRPMenu();
+            } else if (tabName === 'dev') {
+                showDevTab();
             }
             // Add other tab implementations here
         }
@@ -1164,7 +1271,9 @@
             const chatMessages = document.getElementById('chatMessages');
             chatMessages.innerHTML = `
                 <div class="message">
-                    <div class="message-avatar ai-avatar">02</div>
+                    <div class="message-avatar ai-avatar">
+                        <img src="ZeroTwo.png" alt="Zero Two" onerror="this.style.display='none'; this.parentNode.innerHTML='02';">
+                    </div>
                     <div class="message-content ai-message">
                         <div class="message-text">
                             🎭 <strong>Ролевые режимы Zero Two</strong><br><br>
@@ -1174,7 +1283,9 @@
                     </div>
                 </div>
                 <div class="message">
-                    <div class="message-avatar ai-avatar">02</div>
+                    <div class="message-avatar ai-avatar">
+                        <img src="ZeroTwo.png" alt="Zero Two" onerror="this.style.display='none'; this.parentNode.innerHTML='02';">
+                    </div>
                     <div class="message-content ai-message">
                         <div class="message-text">
                             🛸 <strong>Полёт на Стрелиции</strong><br>
@@ -1186,7 +1297,9 @@
                     </div>
                 </div>
                 <div class="message">
-                    <div class="message-avatar ai-avatar">02</div>
+                    <div class="message-avatar ai-avatar">
+                        <img src="ZeroTwo.png" alt="Zero Two" onerror="this.style.display='none'; this.parentNode.innerHTML='02';">
+                    </div>
                     <div class="message-content ai-message">
                         <div class="message-text">
                             🦖 <strong>Убийство Рёвозавров</strong><br>
@@ -1200,6 +1313,90 @@
             `;
         }
 
+        function showDevTab() {
+            const chatMessages = document.getElementById('chatMessages');
+            const devStatus = devMode ? "🟢 АКТИВЕН" : "🔴 НЕАКТИВЕН";
+            chatMessages.innerHTML = `
+                <div class="message">
+                    <div class="message-avatar ai-avatar">
+                        <img src="ZeroTwo.png" alt="Zero Two" onerror="this.style.display='none'; this.parentNode.innerHTML='02';">
+                    </div>
+                    <div class="message-content ai-message">
+                        <div class="message-text">
+                            🔧 <strong>Dev Mode</strong><br>
+                            Статус: ${devStatus}<br><br>
+                            Для активации введи пароль в панели справа.
+                        </div>
+                        <div class="message-time">Только что</div>
+                    </div>
+                </div>
+                <div class="message">
+                    <div class="message-avatar ai-avatar">
+                        <img src="ZeroTwo.png" alt="Zero Two" onerror="this.style.display='none'; this.parentNode.innerHTML='02';">
+                    </div>
+                    <div class="message-content ai-message">
+                        <div class="message-text">
+                            💻 <strong>Доступные команды в Dev Mode:</strong><br>
+                            • /dev reset - Сброс обучения<br>
+                            • /dev stats - Макс. статистика<br>
+                            • /dev train - Принудительное обучение<br>
+                            • /dev rp - Разблокировать все РП
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Dev Mode functions
+        function activateDevMode() {
+            const password = document.getElementById('devPassword').value;
+            if (password === 'ZTDfK') {
+                devMode = true;
+                document.getElementById('devFeatures').style.display = 'block';
+                document.getElementById('devPassword').value = '';
+                addMessage('ai', '🔧 Dev Mode АКТИВИРОВАН! Доступны расширенные функции!');
+                showDevTab();
+                saveState();
+            } else {
+                addMessage('ai', '❌ Неверный пароль Dev Mode!');
+            }
+        }
+
+        function resetTraining() {
+            trainingProgress = 0;
+            document.getElementById('trainingProgress').style.width = '0%';
+            document.getElementById('progressPercent').textContent = '0%';
+            addMessage('ai', '🔧 Dev: Обучение сброшено!');
+        }
+
+        function forceTraining() {
+            trainingProgress = 100;
+            document.getElementById('trainingProgress').style.width = '100%';
+            document.getElementById('progressPercent').textContent = '100%';
+            updateTrainingStats();
+            addMessage('ai', '🔧 Dev: Принудительное обучение завершено!');
+        }
+
+        function maxStats() {
+            messageCount = 9999;
+            learnedWords = 99999;
+            rpSessions = 999;
+            updateStats();
+            addMessage('ai', '🔧 Dev: Статистика максимизирована!');
+        }
+
+        function resetStats() {
+            messageCount = 0;
+            learnedWords = 0;
+            rpSessions = 0;
+            updateStats();
+            addMessage('ai', '🔧 Dev: Статистика сброшена!');
+        }
+
+        function unlockAllRP() {
+            addMessage('ai', '🔧 Dev: Все РП режимы разблокированы!');
+        }
+
         // Save/Load state
         function saveState() {
             const state = {
@@ -1208,7 +1405,8 @@
                 rpSessions,
                 trainingProgress,
                 currentRP,
-                rpProgress
+                rpProgress,
+                devMode
             };
             localStorage.setItem('zeroTwoAIState', JSON.stringify(state));
         }
@@ -1223,10 +1421,15 @@
                 trainingProgress = state.trainingProgress || 0;
                 currentRP = state.currentRP || null;
                 rpProgress = state.rpProgress || {};
+                devMode = state.devMode || false;
                 
                 updateStats();
                 document.getElementById('trainingProgress').style.width = trainingProgress + '%';
                 document.getElementById('progressPercent').textContent = Math.round(trainingProgress) + '%';
+                
+                if (devMode) {
+                    document.getElementById('devFeatures').style.display = 'block';
+                }
             }
         }
 
